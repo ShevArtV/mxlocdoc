@@ -458,8 +458,13 @@
 .mxlocdoc-toc__link {
     display: block;
     padding: 5px 0;
+    border: 0;
+    background: transparent;
     color: #51606f;
+    font: inherit;
     text-decoration: none;
+    text-align: left;
+    cursor: pointer;
     overflow-wrap: anywhere;
 }
 

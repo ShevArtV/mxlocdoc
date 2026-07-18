@@ -179,8 +179,15 @@ class mxLocDocMarkdownRenderer
 
     protected function buildAssetUrl($path)
     {
-        return $this->mxlocdoc->config['connector_url']
+        $url = $this->mxlocdoc->config['connector_url']
             . '?action=mgr/asset/get&path=' . rawurlencode($path);
+        $auth = isset($_REQUEST['HTTP_MODAUTH']) ? trim((string)$_REQUEST['HTTP_MODAUTH']) : '';
+
+        if ($auth !== '') {
+            $url .= '&HTTP_MODAUTH=' . rawurlencode($auth);
+        }
+
+        return $url;
     }
 
     protected function splitReference($reference)
