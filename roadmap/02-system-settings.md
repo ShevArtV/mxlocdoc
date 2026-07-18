@@ -1,5 +1,7 @@
 # 02. System Settings
 
+Status: done, 2026-07-18.
+
 ## Цель
 
 Зафиксировать системные настройки, через которые администратор MODX будет управлять источником документации, навигацией, поиском и ограничениями безопасности.
@@ -39,9 +41,12 @@
 - `mxlocdoc.cache_ttl` управляет кешем navigation/search для v1.
 - `mxlocdoc.max_file_size` ограничивает чтение больших файлов.
 - `mxlocdoc.allowed_asset_extensions` содержит whitelist форматов изображений и ассетов.
+- Лексиконы настроек вынесены в `core/components/mxlocdoc/lexicon/ru/setting.inc.php`.
+- Runtime-сервис `mxLocDoc` читает настройки в единый `$config` для следующих этапов.
 
 ## Риски и ограничения
 
 - `docs_path` нельзя трактовать как URL: это локальный filesystem path.
 - Пустой или неверный `docs_path` должен давать понятную ошибку в manager UI.
 - Слишком широкие `allowed_asset_extensions` повышают риск отдачи нежелательных файлов через connector.
+- Проверка `realpath`, выхода за корень и размера файлов не входит в этот этап; это задача `03-secure-filesystem`.

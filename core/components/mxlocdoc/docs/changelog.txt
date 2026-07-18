@@ -5,3 +5,4 @@ mxLocDoc Changelog
 ---------
 
 - Initial MODX 2 package skeleton.
+- Add system settings, setting lexicons and runtime option normalization.
