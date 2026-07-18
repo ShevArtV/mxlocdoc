@@ -2,7 +2,8 @@
 
 Lightweight MODX Revolution 2 extra for reading local Markdown documentation inside the MODX manager.
 
-Current status: roadmap stage. Package source code has not been scaffolded yet.
+Current status: early package skeleton. Markdown navigation, rendering, assets and
+search are still roadmap items.
 
 ## Core Decisions
 
@@ -21,7 +22,8 @@ Current status: roadmap stage. Package source code has not been scaffolded yet.
 The implementation plan is in [`roadmap/`](roadmap/):
 
 - [`00-preparation.md`](roadmap/00-preparation.md) — done.
-- [`01-package-skeleton.md`](roadmap/01-package-skeleton.md) — next.
+- [`01-package-skeleton.md`](roadmap/01-package-skeleton.md) — done.
+- [`02-system-settings.md`](roadmap/02-system-settings.md) — next.
 
 ## License
 

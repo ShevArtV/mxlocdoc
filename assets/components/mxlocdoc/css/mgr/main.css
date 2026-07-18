@@ -1,0 +1,20 @@
+.mxlocdoc-app {
+    min-height: 360px;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+}
+
+.mxlocdoc-empty {
+    padding: 24px;
+}
+
+.mxlocdoc-empty h2 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.mxlocdoc-empty p {
+    margin: 0;
+    color: #555;
+}

@@ -1,0 +1,4 @@
+License
+-------
+
+The public package license will be defined before the first production release.
