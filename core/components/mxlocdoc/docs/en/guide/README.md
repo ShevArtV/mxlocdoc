@@ -1,8 +1,8 @@
 # Guide
 
-This section describes the day-to-day mxLocDoc workflow: installation, settings, navigation, Markdown files, local assets, search, cache invalidation, and multilingual documentation roots.
+This section describes the day-to-day mxLocDoc workflow: installation, settings, navigation, Markdown files, local assets, search, cache invalidation, and multilingual documentation.
 
-The recommended setup is to keep the public documentation in the repository `docs/` directory and mirror the same files into `core/components/mxlocdoc/docs/` before building the MODX package. That keeps the website documentation and the manager viewer aligned.
+Use these pages when you need to connect an existing documentation folder to the manager, prepare a navigation manifest, add images or attachments, enable search, or split the documentation by language.
 
 ## Sections
 
