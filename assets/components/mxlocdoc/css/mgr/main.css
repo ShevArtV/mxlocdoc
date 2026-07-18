@@ -117,6 +117,10 @@
     list-style: none;
 }
 
+.mxlocdoc-nav__item {
+    margin: 1px 0;
+}
+
 .mxlocdoc-nav__children {
     margin-left: 12px;
     padding-left: 10px;
@@ -152,6 +156,23 @@
     background: #dfeef9;
     color: #123f63;
     font-weight: 600;
+}
+
+.mxlocdoc-nav__item.is-active-branch > .mxlocdoc-nav__section {
+    color: #123f63;
+    background: #f1f7fc;
+}
+
+.mxlocdoc-nav__item.is-active-branch > .mxlocdoc-nav__section::before {
+    display: inline-block;
+    margin-right: 6px;
+    color: #2f6f9f;
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
 }
 
 .mxlocdoc-nav__section {

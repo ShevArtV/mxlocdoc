@@ -69,6 +69,33 @@ Ext.onReady(function () {
         return lexicon[key] || fallback || '';
     }
 
+    function hydrateLexicon() {
+        hydrateAttribute('data-mxlocdoc-text', function (element, value) {
+            element.textContent = value;
+        });
+        hydrateAttribute('data-mxlocdoc-title', function (element, value) {
+            element.setAttribute('title', value);
+        });
+        hydrateAttribute('data-mxlocdoc-aria', function (element, value) {
+            element.setAttribute('aria-label', value);
+        });
+        hydrateAttribute('data-mxlocdoc-placeholder', function (element, value) {
+            element.setAttribute('placeholder', value);
+        });
+    }
+
+    function hydrateAttribute(attribute, setter) {
+        var elements = root.querySelectorAll('[' + attribute + ']');
+        Array.prototype.forEach.call(elements, function (element) {
+            var key = element.getAttribute(attribute);
+            var value = text(key, '');
+
+            if (value) {
+                setter(element, value);
+            }
+        });
+    }
+
     function buildQuery(data) {
         var parts = [];
         Object.keys(data).forEach(function (key) {
@@ -115,6 +142,7 @@ Ext.onReady(function () {
             var li = document.createElement('li');
             var node;
 
+            li.className = 'mxlocdoc-nav__item';
             if (item.path) {
                 node = document.createElement('button');
                 node.type = 'button';
@@ -148,6 +176,11 @@ Ext.onReady(function () {
         var links = ui.nav.querySelectorAll('[data-path]');
         Array.prototype.forEach.call(links, function (link) {
             link.classList.toggle('is-active', link.dataset.path === path);
+        });
+
+        var items = ui.nav.querySelectorAll('.mxlocdoc-nav__item');
+        Array.prototype.forEach.call(items, function (item) {
+            item.classList.toggle('is-active-branch', !!item.querySelector('.mxlocdoc-nav__link.is-active'));
         });
     }
 
@@ -354,6 +387,7 @@ Ext.onReady(function () {
         }
     });
 
+    hydrateLexicon();
     root.classList.add('mxlocdoc-ready');
     loadNavigation();
 
