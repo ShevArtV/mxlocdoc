@@ -142,12 +142,15 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) 220px;
     gap: 0;
+    height: calc(100vh - 150px);
     min-height: 504px;
+    overflow: hidden;
 }
 
 .mxlocdoc-document-panel {
     min-width: 0;
     padding: 24px 28px 40px;
+    overflow: auto;
     background: #ffffff;
 }
 
@@ -443,6 +446,7 @@
 .mxlocdoc-toc {
     min-width: 0;
     padding: 24px 18px;
+    overflow: auto;
     border-left: 1px solid #d8dde3;
     background: #f9fafb;
 }
@@ -504,6 +508,8 @@
 
     .mxlocdoc-content-grid {
         grid-template-columns: 1fr;
+        height: auto;
+        overflow: visible;
     }
 
     .mxlocdoc-toc {

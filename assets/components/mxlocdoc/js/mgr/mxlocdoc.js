@@ -25,6 +25,7 @@ Ext.onReady(function () {
         searchHint: root.querySelector('[data-mxlocdoc-search-hint]'),
         searchResults: root.querySelector('[data-mxlocdoc-search-results]'),
         state: root.querySelector('[data-mxlocdoc-state]'),
+        documentPanel: root.querySelector('.mxlocdoc-document-panel'),
         breadcrumbs: root.querySelector('[data-mxlocdoc-breadcrumbs]'),
         article: root.querySelector('[data-mxlocdoc-article]'),
         warnings: root.querySelector('[data-mxlocdoc-warnings]'),
@@ -261,6 +262,7 @@ Ext.onReady(function () {
             }
             setState('', '');
             renderDocument(object);
+            resetDocumentScroll();
         });
     }
 
@@ -337,13 +339,33 @@ Ext.onReady(function () {
                 var target = document.getElementById(link.getAttribute('data-target'));
 
                 event.preventDefault();
-                if (target && target.scrollIntoView) {
-                    target.scrollIntoView({block: 'start', inline: 'nearest'});
-                }
+                scrollDocumentTo(target);
             });
         });
     }
 
+    function scrollDocumentTo(target) {
+        if (!target) {
+            return;
+        }
+
+        if (ui.documentPanel) {
+            var panelBox = ui.documentPanel.getBoundingClientRect();
+            var targetBox = target.getBoundingClientRect();
+            ui.documentPanel.scrollTop += targetBox.top - panelBox.top - 12;
+            return;
+        }
+
+        if (target.scrollIntoView) {
+            target.scrollIntoView({block: 'start', inline: 'nearest'});
+        }
+    }
+
+    function resetDocumentScroll() {
+        if (ui.documentPanel) {
+            ui.documentPanel.scrollTop = 0;
+        }
+    }
     function makeHeadingId(text, index) {
         var slug = String(text || '')
             .toLowerCase()
