@@ -15,6 +15,7 @@ Ext.onReady(function () {
         collapsedNav: loadCollapsedNav()
     };
     var lexicon = MxLocDoc.config.lexicon || {};
+    var defaultFile = MxLocDoc.config.default_file || 'README.md';
 
     var ui = {
         shell: root.querySelector('[data-mxlocdoc-shell]'),
@@ -23,7 +24,6 @@ Ext.onReady(function () {
         sidebarClose: root.querySelector('[data-mxlocdoc-sidebar-close]'),
         nav: root.querySelector('[data-mxlocdoc-nav]'),
         search: root.querySelector('[data-mxlocdoc-search]'),
-        searchHint: root.querySelector('[data-mxlocdoc-search-hint]'),
         searchResults: root.querySelector('[data-mxlocdoc-search-results]'),
         state: root.querySelector('[data-mxlocdoc-state]'),
         documentPanel: root.querySelector('.mxlocdoc-document-panel'),
@@ -369,13 +369,73 @@ Ext.onReady(function () {
 
     function renderBreadcrumbs(path) {
         var segments = String(path || '').split('/').filter(Boolean);
-        var html = ['<span>' + escapeHtml(text('documentation', 'Documentation')) + '</span>'];
+        var currentPath = String(path || '');
+        var rootPath = findDocumentPath(defaultFile) || firstDocument(state.nav ? state.nav.items : []);
 
-        segments.forEach(function (segment) {
-            html.push('<span>' + escapeHtml(segment) + '</span>');
+        ui.breadcrumbs.innerHTML = '';
+        appendBreadcrumb(text('documentation', 'Documentation'), rootPath, currentPath === rootPath);
+
+        if (currentPath === rootPath) {
+            return;
+        }
+
+        segments.forEach(function (segment, index) {
+            var isLast = index === segments.length - 1;
+            var targetPath = isLast ? currentPath : findDirectoryIndexPath(segments.slice(0, index + 1).join('/'));
+
+            appendBreadcrumbSeparator();
+            appendBreadcrumb(segment, targetPath, isLast || !targetPath);
+        });
+    }
+
+    function appendBreadcrumb(label, path, isCurrent) {
+        var node;
+
+        if (path && !isCurrent) {
+            node = document.createElement('button');
+            node.type = 'button';
+            node.className = 'mxlocdoc-breadcrumbs__link';
+            node.dataset.path = path;
+            node.addEventListener('click', function () {
+                loadDocument(path, true);
+            });
+        } else {
+            node = document.createElement('span');
+            node.className = 'mxlocdoc-breadcrumbs__current';
+        }
+
+        node.textContent = label;
+        ui.breadcrumbs.appendChild(node);
+    }
+
+    function appendBreadcrumbSeparator() {
+        var separator = document.createElement('span');
+
+        separator.className = 'mxlocdoc-breadcrumbs__sep';
+        separator.textContent = '/';
+        ui.breadcrumbs.appendChild(separator);
+    }
+
+    function findDirectoryIndexPath(directory) {
+        var normalized = String(directory || '').replace(/^\/+|\/+$/g, '');
+        var candidate = normalized ? normalized + '/' + defaultFile : defaultFile;
+
+        return findDocumentPath(candidate);
+    }
+
+    function findDocumentPath(path) {
+        var normalized = String(path || '').replace(/^\/+/, '');
+        var found = '';
+
+        state.flatItems.some(function (item) {
+            if (item.path === normalized) {
+                found = item.path;
+                return true;
+            }
+            return false;
         });
 
-        ui.breadcrumbs.innerHTML = html.join('<span class="mxlocdoc-breadcrumbs__sep">/</span>');
+        return found;
     }
 
     function wireArticleLinks() {

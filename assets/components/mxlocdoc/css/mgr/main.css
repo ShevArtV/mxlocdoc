@@ -50,6 +50,7 @@
 .mxlocdoc-topbar {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
     min-height: 56px;
     padding: 10px 16px;
@@ -67,7 +68,8 @@
 
 .mxlocdoc-search {
     position: relative;
-    flex: 1 1 420px;
+    flex: 0 1 620px;
+    margin-left: auto;
     max-width: 620px;
     min-width: 220px;
 }
@@ -81,12 +83,6 @@
     border-radius: 4px;
     background: #f9fafb;
     color: #1f2933;
-}
-
-.mxlocdoc-search__hint {
-    margin-top: 4px;
-    color: #66788a;
-    font-size: 12px;
 }
 
 .mxlocdoc-search__results {
@@ -168,6 +164,26 @@
 
 .mxlocdoc-breadcrumbs__sep {
     color: #9aa8b7;
+}
+
+.mxlocdoc-breadcrumbs__link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #1d6fa5;
+    font: inherit;
+    cursor: pointer;
+    overflow-wrap: anywhere;
+}
+
+.mxlocdoc-breadcrumbs__link:hover,
+.mxlocdoc-breadcrumbs__link:focus {
+    text-decoration: underline;
+}
+
+.mxlocdoc-breadcrumbs__current {
+    color: #66788a;
+    overflow-wrap: anywhere;
 }
 
 .mxlocdoc-nav {
@@ -666,6 +682,7 @@
 
     .mxlocdoc-search {
         flex-basis: 100%;
+        margin-left: 0;
         max-width: none;
     }
 
