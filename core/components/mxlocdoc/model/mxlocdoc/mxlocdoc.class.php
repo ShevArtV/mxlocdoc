@@ -58,7 +58,7 @@ class mxLocDoc
             'assets_url' => $assetsUrl,
             'assets_path' => $assetsPath,
             'connector_url' => $assetsUrl . 'connector.php',
-            'docs_path' => $this->getOption('docs_path', ''),
+            'docs_path' => $this->getOption('docs_path', '[[+corePath]]components/mxlocdoc/docs/'),
             'default_file' => $this->getOption('default_file', 'README.md'),
             'nav_file' => $this->getOption('nav_file', '_sidebar.json'),
             'search_enabled' => $this->getBooleanOption('search_enabled', true),

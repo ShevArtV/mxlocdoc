@@ -13,7 +13,7 @@ Search cache/clear polish is still a roadmap item.
 - Built with `modxbuilder`.
 - Manager UI as a lightweight CMP with vanilla JS/CSS.
 - No VitePress, Node, Vue, Vite, or separate frontend build pipeline.
-- Documentation root comes from the `mxlocdoc.docs_path` system setting.
+- Documentation root comes from the `mxlocdoc.docs_path` system setting; the default uses `[[+corePath]]components/mxlocdoc/docs/`.
 - Navigation comes from `_sidebar.json` or `mxlocdoc.json`, with filesystem fallback.
 - Markdown is rendered server-side with safe HTML handling.
 - Relative Markdown images are served through a protected connector.

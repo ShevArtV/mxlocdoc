@@ -11,7 +11,7 @@ $_lang['area_mxlocdoc:search'] = 'Поиск';
 $_lang['area_mxlocdoc:cache'] = 'Кеш';
 
 $_lang['setting_mxlocdoc.docs_path'] = 'Путь к документации';
-$_lang['setting_mxlocdoc.docs_path_desc'] = 'Абсолютный путь к локальной папке с Markdown-документацией. Публичным URL не является.';
+$_lang['setting_mxlocdoc.docs_path_desc'] = 'Путь к локальной папке с Markdown-документацией относительно MODX core. Можно использовать placeholder [[+corePath]], например [[+corePath]]components/mxlocdoc/docs/. Публичным URL не является.';
 
 $_lang['setting_mxlocdoc.default_file'] = 'Файл по умолчанию';
 $_lang['setting_mxlocdoc.default_file_desc'] = 'Markdown-файл, который открывается при входе в документацию без указанного пути.';

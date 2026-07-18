@@ -9,7 +9,7 @@
 
 $definitions = array(
     'mxlocdoc.docs_path' => array(
-        'value' => '',
+        'value' => '[[+corePath]]components/mxlocdoc/docs/',
         'xtype' => 'textfield',
         'area' => 'mxlocdoc:filesystem',
     ),

@@ -27,7 +27,7 @@ class mxLocDocPathResolver
             return $this->success($this->rootPath);
         }
 
-        $path = trim((string)$this->mxlocdoc->config['docs_path']);
+        $path = $this->resolveRootSetting((string)$this->mxlocdoc->config['docs_path']);
         if ($path === '') {
             return $this->failure('docs_path_empty', $this->modx->lexicon('mxlocdoc_error_docs_path_empty'));
         }
@@ -129,6 +129,40 @@ class mxLocDocPathResolver
         $path = str_replace('\\', '/', trim((string)$path));
         $path = preg_replace('#/+#', '/', $path);
         return ltrim($path, '/');
+    }
+
+    protected function resolveRootSetting($path)
+    {
+        $path = trim((string)$path);
+        if ($path === '') {
+            return '';
+        }
+
+        $path = str_replace(
+            array('[[+corePath]]', '[[+basePath]]', '[[+assetsPath]]'),
+            array(
+                $this->modx->getOption('core_path'),
+                $this->modx->getOption('base_path'),
+                $this->modx->getOption('assets_path'),
+            ),
+            $path
+        );
+
+        if (!$this->isAbsolutePath($path)) {
+            $relativePath = $this->normalizeRelativePath($path);
+            if ($relativePath === '' || $this->hasUnsafePathSegments($relativePath)) {
+                return '';
+            }
+            $path = rtrim($this->modx->getOption('core_path'), '/\\') . DIRECTORY_SEPARATOR . $relativePath;
+        }
+
+        return $this->normalizeDirectorySeparators($path);
+    }
+
+    protected function isAbsolutePath($path)
+    {
+        $path = (string)$path;
+        return strpos($path, '/') === 0 || preg_match('/^[A-Za-z]:[\/\\\\]/', $path) === 1;
     }
 
     protected function normalizeDirectorySeparators($path)
