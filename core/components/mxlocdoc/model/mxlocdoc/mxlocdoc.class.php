@@ -24,6 +24,9 @@ class mxLocDoc
     /** @var mxLocDocNavigationBuilder */
     protected $navigationBuilder;
 
+    /** @var mxLocDocMarkdownRenderer */
+    protected $markdownRenderer;
+
     public function __construct(modX &$modx, array $config = array())
     {
         $this->modx =& $modx;
@@ -119,6 +122,19 @@ class mxLocDoc
         }
 
         return $this->navigationBuilder;
+    }
+
+    /**
+     * @return mxLocDocMarkdownRenderer
+     */
+    public function getMarkdownRenderer()
+    {
+        if (!$this->markdownRenderer) {
+            require_once $this->config['core_path'] . 'services/markdownrenderer.class.php';
+            $this->markdownRenderer = new mxLocDocMarkdownRenderer($this->modx, $this, $this->getAssetRepository());
+        }
+
+        return $this->markdownRenderer;
     }
 
     /**

@@ -40,6 +40,21 @@ class mxLocDocDocumentGetProcessor extends modProcessor
             return $this->failure($result['message'], array('code' => $result['code']));
         }
 
+        $rendered = $this->mxlocdoc->getMarkdownRenderer()->render($result);
+        if (empty($rendered['success'])) {
+            return $this->failure($rendered['message'], array('code' => $rendered['code']));
+        }
+
+        $metadata = $this->mxlocdoc->getDocumentRepository()->getMetadata($result['path']);
+        if (!empty($metadata['success'])) {
+            $result['title'] = $metadata['title'];
+        }
+
+        $result['html'] = $rendered['html'];
+        $result['assets'] = $rendered['assets'];
+        $result['links'] = $rendered['links'];
+        $result['warnings'] = $rendered['warnings'];
+
         return $this->success('', $result);
     }
 }

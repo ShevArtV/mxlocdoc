@@ -6,3 +6,6 @@ mxLocDoc Changelog
 
 - Initial MODX 2 package skeleton.
 - Add system settings, setting lexicons and runtime option normalization.
+- Add secure filesystem services, document and asset processors.
+- Add navigation builder with manifest and filesystem fallback.
+- Add safe Markdown renderer with protected relative asset URLs.

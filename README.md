@@ -3,8 +3,8 @@
 Lightweight MODX Revolution 2 extra for reading local Markdown documentation inside the MODX manager.
 
 Current status: package skeleton with system settings, secure filesystem
-services and Markdown navigation. Rendering, assets wiring and search are still
-roadmap items.
+services, Markdown navigation and safe Markdown rendering with protected asset
+URLs. Manager UI and search are still roadmap items.
 
 ## Core Decisions
 
@@ -17,6 +17,7 @@ roadmap items.
 - Markdown is rendered server-side with safe HTML handling.
 - Relative Markdown images are served through a protected connector.
 - Search scans `.md` files and may use cache in v1.
+- Markdown rendering uses vendored Parsedown in safe mode.
 
 ## Roadmap
 
@@ -27,7 +28,8 @@ The implementation plan is in [`roadmap/`](roadmap/):
 - [`02-system-settings.md`](roadmap/02-system-settings.md) — done.
 - [`03-secure-filesystem.md`](roadmap/03-secure-filesystem.md) — done.
 - [`04-navigation.md`](roadmap/04-navigation.md) — done.
-- [`05-markdown-assets.md`](roadmap/05-markdown-assets.md) — next.
+- [`05-markdown-assets.md`](roadmap/05-markdown-assets.md) — done.
+- [`06-manager-ui.md`](roadmap/06-manager-ui.md) — next.
 
 ## License
 
