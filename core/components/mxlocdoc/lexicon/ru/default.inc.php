@@ -7,7 +7,21 @@
  */
 $_lang['mxlocdoc'] = 'mxLocDoc';
 $_lang['mxlocdoc_menu_desc'] = 'Просмотр локальной Markdown-документации';
-$_lang['mxlocdoc_intro'] = 'Интерфейс документации будет добавлен следующими этапами roadmap.';
+$_lang['mxlocdoc_navigation'] = 'Навигация документации';
+$_lang['mxlocdoc_open_navigation'] = 'Открыть навигацию';
+$_lang['mxlocdoc_close_navigation'] = 'Закрыть навигацию';
+$_lang['mxlocdoc_search_placeholder'] = 'Поиск по документации';
+$_lang['mxlocdoc_search_coming_soon'] = 'Сейчас фильтрует навигацию; полнотекстовый поиск будет подключен следующим этапом.';
+$_lang['mxlocdoc_loading'] = 'Загрузка...';
+$_lang['mxlocdoc_loading_navigation'] = 'Загрузка навигации...';
+$_lang['mxlocdoc_loading_document'] = 'Загрузка документа...';
+$_lang['mxlocdoc_navigation_error'] = 'Не удалось загрузить навигацию.';
+$_lang['mxlocdoc_document_error'] = 'Не удалось загрузить документ.';
+$_lang['mxlocdoc_documents_empty'] = 'Документы не найдены.';
+$_lang['mxlocdoc_documentation'] = 'Документация';
+$_lang['mxlocdoc_invalid_json'] = 'Некорректный JSON-ответ.';
+$_lang['mxlocdoc_breadcrumbs'] = 'Хлебные крошки';
+$_lang['mxlocdoc_toc'] = 'На этой странице';
 
 $_lang['mxlocdoc_error_service_unavailable'] = 'Сервис mxLocDoc недоступен.';
 $_lang['mxlocdoc_error_docs_path_empty'] = 'Не задан путь к папке документации.';

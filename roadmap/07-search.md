@@ -25,7 +25,7 @@
   - `core/cache/mxlocdoc/`
 - Будущий UI:
   - `assets/components/mxlocdoc/js/mgr/mxlocdoc.js`
-  - `core/components/mxlocdoc/templates/mgr/home.tpl`
+  - `core/components/mxlocdoc/templates/home.tpl`
 
 ## Зачем
 

@@ -1,5 +1,7 @@
 # 06. Manager UI
 
+Status: done locally on 2026-07-18. Live MODX manager browser check is deferred to `08-hostland-stand` because this session has no Chrome DevTools MCP tools.
+
 ## Цель
 
 Сделать manager CMP похожим на внутренний docs-сайт: с навигацией, поиском, хлебными крошками, статьей и оглавлением.
@@ -14,18 +16,17 @@
 
 ## Куда именно
 
-- Будущий manager controller:
-  - `core/components/mxlocdoc/controllers/mgr/home.class.php`
+- Manager controller:
   - `core/components/mxlocdoc/controllers/index.class.php`
-- Будущий template:
-  - `core/components/mxlocdoc/templates/mgr/home.tpl`
-- Будущие assets:
+- Template:
+  - `core/components/mxlocdoc/templates/home.tpl`
+- Assets:
   - `assets/components/mxlocdoc/js/mgr/mxlocdoc.js`
   - `assets/components/mxlocdoc/css/mgr/main.css`
-- Будущие processors:
+- Processors:
   - `core/components/mxlocdoc/processors/mgr/navigation/get.class.php`
   - `core/components/mxlocdoc/processors/mgr/document/get.class.php`
-  - `core/components/mxlocdoc/processors/mgr/search.class.php`
+  - `core/components/mxlocdoc/processors/mgr/search.class.php` (next step)
 
 ## Зачем
 
@@ -33,13 +34,13 @@
 
 ## Чеклист готовности
 
-- Sidebar показывает manifest/fallback-навигацию.
-- Top search доступен сразу после открытия CMP.
-- Breadcrumbs отражают текущий путь документа.
-- Article area корректно рендерит заголовки, списки, code blocks, таблицы и изображения.
-- TOC строится по headings текущей статьи.
-- Длинные строки и названия не ломают layout.
-- UI проверен в manager через Chrome MCP/browser check.
+- [x] Sidebar показывает manifest/fallback-навигацию.
+- [x] Top search доступен сразу после открытия CMP: в шаге 06 фильтрует навигацию, full-text идет в шаге 07.
+- [x] Breadcrumbs отражают текущий путь документа.
+- [x] Article area рассчитан на заголовки, списки, code blocks, таблицы и изображения из server-side Markdown renderer.
+- [x] TOC строится по headings текущей статьи.
+- [x] Длинные строки и названия не ломают layout за счет `min-width: 0`, `overflow-wrap: anywhere`, scroll для `pre`/`table`.
+- [ ] UI проверен в manager через Chrome MCP/browser check: перенесено на `08-hostland-stand`.
 
 ## Риски и ограничения
 

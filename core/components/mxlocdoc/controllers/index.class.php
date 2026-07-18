@@ -62,6 +62,15 @@ class mxLocDocIndexManagerController extends modExtraManagerController
             MxLocDoc.config = ' . $this->modx->toJSON(array(
                 'connector_url' => $this->mxlocdoc->config['connector_url'],
                 'assets_url' => $assetsUrl,
+                'lexicon' => array(
+                    'loading_navigation' => $this->modx->lexicon('mxlocdoc_loading_navigation'),
+                    'loading_document' => $this->modx->lexicon('mxlocdoc_loading_document'),
+                    'navigation_error' => $this->modx->lexicon('mxlocdoc_navigation_error'),
+                    'document_error' => $this->modx->lexicon('mxlocdoc_document_error'),
+                    'documents_empty' => $this->modx->lexicon('mxlocdoc_documents_empty'),
+                    'documentation' => $this->modx->lexicon('mxlocdoc_documentation'),
+                    'invalid_json' => $this->modx->lexicon('mxlocdoc_invalid_json'),
+                ),
             )) . ';
         </script>');
     }

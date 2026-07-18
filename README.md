@@ -3,8 +3,9 @@
 Lightweight MODX Revolution 2 extra for reading local Markdown documentation inside the MODX manager.
 
 Current status: package skeleton with system settings, secure filesystem
-services, Markdown navigation and safe Markdown rendering with protected asset
-URLs. Manager UI and search are still roadmap items.
+services, Markdown navigation, safe Markdown rendering with protected asset
+URLs, and a vanilla JS/CSS manager docs UI. Full-text search is still a roadmap
+item.
 
 ## Core Decisions
 
@@ -29,7 +30,8 @@ The implementation plan is in [`roadmap/`](roadmap/):
 - [`03-secure-filesystem.md`](roadmap/03-secure-filesystem.md) — done.
 - [`04-navigation.md`](roadmap/04-navigation.md) — done.
 - [`05-markdown-assets.md`](roadmap/05-markdown-assets.md) — done.
-- [`06-manager-ui.md`](roadmap/06-manager-ui.md) — next.
+- [`06-manager-ui.md`](roadmap/06-manager-ui.md) — done locally; live manager browser check is deferred to Hostland stand.
+- [`07-search.md`](roadmap/07-search.md) — next.
 
 ## License
 
