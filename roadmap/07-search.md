@@ -1,6 +1,6 @@
 # 07. Search
 
-Status: partially done on 2026-07-18. Live filesystem search by title/path/body is implemented after stand feedback; cache/clear remains.
+Status: done on 2026-07-19. Live filesystem search by title/path/body is implemented with cache in `core/cache/mxlocdoc`; MODX manager cache clear removes mxLocDoc cache through `OnBeforeCacheUpdate`.
 
 ## Цель
 
@@ -12,8 +12,8 @@ Status: partially done on 2026-07-18. Live filesystem search by title/path/body 
 - [x] Искать по title, headings, body и path.
 - [x] Возвращать сниппеты результатов.
 - [x] Сделать live-search в manager UI.
-- Кешировать подготовленные данные в `core/cache/mxlocdoc` для v1.
-- Добавить механизм cache clear.
+- [x] Кешировать подготовленные данные в `core/cache/mxlocdoc` для v1.
+- [x] Добавить механизм cache clear.
 
 ## Куда именно
 
@@ -40,7 +40,7 @@ Status: partially done on 2026-07-18. Live filesystem search by title/path/body 
 - В результатах есть title, path и короткий snippet.
 - Live-search не блокирует UI на небольших и средних наборах документации.
 - Cache хранится в `core/cache/mxlocdoc`.
-- Cache можно очистить из UI или processor-ом.
+- Cache очищается plugin-ом `mxLocDocCacheClear` на MODX event `OnBeforeCacheUpdate`.
 
 ## Риски и ограничения
 

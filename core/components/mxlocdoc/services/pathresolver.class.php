@@ -15,6 +15,12 @@ class mxLocDocPathResolver
     /** @var string|null */
     protected $rootPath = null;
 
+    /** @var string|null */
+    protected $basePath = null;
+
+    /** @var array|null */
+    protected $languages = null;
+
     public function __construct(modX &$modx, mxLocDoc $mxlocdoc)
     {
         $this->modx =& $modx;
@@ -27,18 +33,76 @@ class mxLocDocPathResolver
             return $this->success($this->rootPath);
         }
 
-        $path = $this->resolveRootSetting((string)$this->mxlocdoc->config['docs_path']);
-        if ($path === '') {
-            return $this->failure('docs_path_empty', $this->modx->lexicon('mxlocdoc_error_docs_path_empty'));
+        $base = $this->getBasePath();
+        if (!$base['success']) {
+            return $base;
         }
 
-        $root = realpath($path);
-        if ($root === false || !is_dir($root)) {
-            return $this->failure('docs_path_invalid', $this->modx->lexicon('mxlocdoc_error_docs_path_invalid'));
+        $root = $base['path'];
+        $languages = $this->getAvailableLanguages();
+        if (!empty($languages)) {
+            $language = $this->selectLanguage($languages);
+            $root = realpath($base['path'] . $language . DIRECTORY_SEPARATOR);
+            if ($root === false || !is_dir($root)) {
+                return $this->failure('docs_path_invalid', $this->modx->lexicon('mxlocdoc_error_docs_path_invalid'));
+            }
+            $this->mxlocdoc->config['language'] = $language;
         }
 
-        $this->rootPath = rtrim($root, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->rootPath = rtrim($this->normalizeDirectorySeparators($root), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         return $this->success($this->rootPath);
+    }
+
+    public function getLanguageContext()
+    {
+        $root = $this->getRootPath();
+        if (!$root['success']) {
+            return $root;
+        }
+
+        $languages = $this->getAvailableLanguages();
+        return array(
+            'success' => true,
+            'language' => empty($languages) ? '' : $this->mxlocdoc->config['language'],
+            'languages' => array_values($languages),
+            'is_multilingual' => count($languages) > 1,
+            'root_path' => $root['path'],
+        );
+    }
+
+    public function getAvailableLanguages()
+    {
+        if ($this->languages !== null) {
+            return $this->languages;
+        }
+
+        $base = $this->getBasePath();
+        if (!$base['success']) {
+            $this->languages = array();
+            return $this->languages;
+        }
+
+        $languages = array();
+        $entries = scandir($base['path']);
+        if ($entries !== false) {
+            foreach ($entries as $entry) {
+                if (!preg_match('/^[a-z]{2}(?:-[a-z0-9]{2,8})?$/i', $entry)) {
+                    continue;
+                }
+                $path = $base['path'] . $entry . DIRECTORY_SEPARATOR;
+                if (is_dir($path) && $this->hasDocumentationFiles($path)) {
+                    $code = strtolower($entry);
+                    $languages[$code] = array(
+                        'code' => $code,
+                        'label' => strtoupper($code),
+                    );
+                }
+            }
+        }
+
+        ksort($languages);
+        $this->languages = $languages;
+        return $this->languages;
     }
 
     public function resolveFile($path)
@@ -124,6 +188,70 @@ class mxLocDocPathResolver
         return $this->success($path);
     }
 
+    protected function getBasePath()
+    {
+        if ($this->basePath !== null) {
+            return $this->success($this->basePath);
+        }
+
+        $path = $this->resolveRootSetting((string)$this->mxlocdoc->config['docs_path']);
+        if ($path === '') {
+            return $this->failure('docs_path_empty', $this->modx->lexicon('mxlocdoc_error_docs_path_empty'));
+        }
+
+        $base = realpath($path);
+        if ($base === false || !is_dir($base)) {
+            return $this->failure('docs_path_invalid', $this->modx->lexicon('mxlocdoc_error_docs_path_invalid'));
+        }
+
+        $this->basePath = rtrim($this->normalizeDirectorySeparators($base), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        return $this->success($this->basePath);
+    }
+
+    protected function selectLanguage(array $languages)
+    {
+        $requested = $this->mxlocdoc->normalizeLanguage($this->mxlocdoc->config['language']);
+        if ($requested !== '' && isset($languages[$requested])) {
+            return $requested;
+        }
+
+        $managerLanguage = $this->mxlocdoc->normalizeLanguage($this->modx->getOption('manager_language', null, ''));
+        if ($managerLanguage !== '' && isset($languages[$managerLanguage])) {
+            return $managerLanguage;
+        }
+
+        $cultureKey = $this->mxlocdoc->normalizeLanguage($this->modx->getOption('cultureKey', null, ''));
+        if ($cultureKey !== '' && isset($languages[$cultureKey])) {
+            return $cultureKey;
+        }
+
+        $codes = array_keys($languages);
+        return reset($codes);
+    }
+
+    protected function hasDocumentationFiles($directory)
+    {
+        $defaultFile = (string)$this->mxlocdoc->config['default_file'];
+        $navFile = (string)$this->mxlocdoc->config['nav_file'];
+        foreach (array($defaultFile, $navFile, 'mxlocdoc.json') as $file) {
+            if ($file !== '' && is_file($directory . $file)) {
+                return true;
+            }
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+        foreach ($iterator as $file) {
+            if ($file->isFile() && preg_match('/\.(md|markdown)$/i', $file->getFilename())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function normalizeRelativePath($path)
     {
         $path = str_replace('\\', '/', trim((string)$path));
@@ -149,7 +277,7 @@ class mxLocDocPathResolver
         );
 
         if (!$this->isAbsolutePath($path)) {
-            $relativePath = $this->normalizeRelativePath($path);
+            $relativePath = trim($this->normalizeRelativePath($path), '/');
             if ($relativePath === '' || $this->hasUnsafePathSegments($relativePath)) {
                 return '';
             }

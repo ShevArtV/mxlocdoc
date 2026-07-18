@@ -74,6 +74,28 @@
     min-width: 220px;
 }
 
+.mxlocdoc-language {
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+
+.mxlocdoc-language[hidden] {
+    display: none;
+}
+
+.mxlocdoc-language select {
+    min-height: 36px;
+    padding: 7px 28px 7px 10px;
+    border: 1px solid #c9d1dc;
+    border-radius: 4px;
+    background: #ffffff;
+    color: #2f3a45;
+}
+
+.mxlocdoc-language + .mxlocdoc-search {
+    margin-left: 0;
+}
+
 .mxlocdoc-search input {
     display: block;
     width: 100%;
@@ -684,6 +706,10 @@
         flex-basis: 100%;
         margin-left: 0;
         max-width: none;
+    }
+
+    .mxlocdoc-language {
+        margin-left: auto;
     }
 
     .mxlocdoc-document-panel {

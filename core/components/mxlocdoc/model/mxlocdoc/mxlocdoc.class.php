@@ -59,6 +59,7 @@ class mxLocDoc
             'assets_path' => $assetsPath,
             'connector_url' => $assetsUrl . 'connector.php',
             'docs_path' => $this->getOption('docs_path', '[[+corePath]]components/mxlocdoc/docs/'),
+            'language' => $this->normalizeLanguage(isset($config['language']) ? $config['language'] : $this->modx->getOption('manager_language', null, $this->modx->getOption('cultureKey', null, 'en'))),
             'default_file' => $this->getOption('default_file', 'README.md'),
             'nav_file' => $this->getOption('nav_file', '_sidebar.json'),
             'search_enabled' => $this->getBooleanOption('search_enabled', true),
@@ -161,6 +162,53 @@ class mxLocDoc
     public function getOption($key, $default = null)
     {
         return $this->modx->getOption('mxlocdoc.' . $key, null, $default);
+    }
+
+    public function setLanguage($language)
+    {
+        $language = $this->normalizeLanguage($language);
+        if ($language === $this->config['language']) {
+            return;
+        }
+
+        $this->config['language'] = $language;
+        $this->pathResolver = null;
+        $this->documentRepository = null;
+        $this->assetRepository = null;
+        $this->navigationBuilder = null;
+        $this->markdownRenderer = null;
+        $this->searchIndex = null;
+    }
+
+    public function getLanguage()
+    {
+        return $this->config['language'];
+    }
+
+    public function normalizeLanguage($language)
+    {
+        $language = strtolower(trim((string)$language));
+        $language = str_replace('_', '-', $language);
+        return preg_match('/^[a-z]{2}(?:-[a-z0-9]{2,8})?$/', $language) ? $language : '';
+    }
+
+    public function clearCache()
+    {
+        $cachePath = $this->getCachePath();
+        if (!is_dir($cachePath)) {
+            return true;
+        }
+
+        return $this->modx->cacheManager->deleteTree($cachePath, array(
+            'deleteTop' => false,
+            'skipDirs' => false,
+            'extensions' => array('.cache', '.cache.php'),
+        ));
+    }
+
+    public function getCachePath()
+    {
+        return rtrim($this->modx->getOption('cache_path'), '/\\') . DIRECTORY_SEPARATOR . 'mxlocdoc' . DIRECTORY_SEPARATOR;
     }
 
     /**

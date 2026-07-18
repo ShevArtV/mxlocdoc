@@ -1,46 +1,36 @@
 <?php
 /**
+ * mxLocDoc plugins.
+ *
  * @var modxBuilder $this
- * @var string $categoryName
- * @var string $namespace
- * @var array $categoryAttr
  */
 
 $plugins = array();
 
-/** @var modCategory $mainCategory */
-$mainCategory = $this->modx->getObject('modCategory', array(
-    'category' => $categoryName,
-));
+/** @var modPlugin $plugin */
+$plugin = $this->modx->newObject('modPlugin');
+$plugin->fromArray(array(
+    'id' => 0,
+    'name' => 'mxLocDocCacheClear',
+    'description' => 'Clears mxLocDoc cache when MODX manager cache is cleared.',
+    'plugincode' => file_get_contents($this->config['source_core'] . 'elements/plugins/plugin.mxlocdoc_cache_clear.php'),
+    'category' => 0,
+    'disabled' => 0,
+    'static' => 1,
+    'static_file' => '{core_path}components/mxlocdoc/elements/plugins/plugin.mxlocdoc_cache_clear.php',
+), '', true, true);
 
-if (!$mainCategory) return $plugins;
+/** @var modPluginEvent $event */
+$event = $this->modx->newObject('modPluginEvent');
+$event->fromArray(array(
+    'event' => 'OnBeforeCacheUpdate',
+    'priority' => 0,
+    'propertyset' => 0,
+), '', true, true);
 
-/** @var modPlugin[] $realPlugins */
-$realPlugins = $mainCategory->getMany('Plugins');
+$plugin->addMany(array($event));
+$plugins[] = $plugin;
 
-if (!$realPlugins) return $plugins;
-
-foreach ($realPlugins as $realPlugin) {
-    /** @var modPluginEvent[] $pluginEvents */
-    $pluginEvents = $realPlugin->getMany('PluginEvents');
-    if ($pluginEvents) {
-        foreach ($pluginEvents as &$pluginEvent) {
-            $pluginEvent->set('pluginid', 0);
-        }
-    } else {
-        $pluginEvents = array();
-    }
-
-    /** @var modPlugin $plugin */
-    $plugin = $this->modx->newObject('modPlugin');
-    $pluginData = $realPlugin->toArray();
-    $pluginData['id'] = 0;
-    $pluginData['static'] = 1;
-    $plugin->fromArray($pluginData);
-    $plugin->addMany($pluginEvents);
-    $plugins[] = $plugin;
-}
-
-unset($realPlugins, $pluginData);
+unset($plugin, $event);
 
 return $plugins;

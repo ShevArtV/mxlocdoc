@@ -29,6 +29,7 @@ class mxLocDocSearchProcessor extends modProcessor
         if (!$this->mxlocdoc) {
             return $this->modx->lexicon('mxlocdoc_error_service_unavailable');
         }
+        $this->mxlocdoc->setLanguage($this->getProperty('language', ''));
 
         return parent::initialize();
     }

@@ -49,6 +49,10 @@ class mxLocDocIndexManagerController extends modExtraManagerController
 
         $assetsUrl = $this->mxlocdoc->config['assets_url'];
         $assetsPath = $this->mxlocdoc->config['assets_path'];
+        $languageContext = $this->mxlocdoc->getPathResolver()->getLanguageContext();
+        if (empty($languageContext['success'])) {
+            $languageContext = array('language' => '', 'languages' => array(), 'is_multilingual' => false);
+        }
 
         $version = function ($relativePath) use ($assetsPath) {
             $file = $assetsPath . $relativePath;
@@ -63,6 +67,9 @@ class mxLocDocIndexManagerController extends modExtraManagerController
                 'connector_url' => $this->mxlocdoc->config['connector_url'],
                 'assets_url' => $assetsUrl,
                 'default_file' => $this->mxlocdoc->config['default_file'],
+                'language' => $languageContext['language'],
+                'languages' => $languageContext['languages'],
+                'is_multilingual' => $languageContext['is_multilingual'],
                 'lexicon' => array(
                     'title' => $this->modx->lexicon('mxlocdoc'),
                     'navigation' => $this->modx->lexicon('mxlocdoc_navigation'),

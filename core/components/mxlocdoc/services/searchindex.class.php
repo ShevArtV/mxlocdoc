@@ -34,7 +34,7 @@ class mxLocDocSearchIndex
             return array('success' => true, 'query' => '', 'items' => array(), 'total' => 0);
         }
 
-        $documents = $this->documentRepository->listAll();
+        $documents = $this->getIndexedDocuments();
         if (empty($documents['success'])) {
             return $documents;
         }
@@ -45,12 +45,7 @@ class mxLocDocSearchIndex
                 continue;
             }
 
-            $document = $this->documentRepository->get($metadata['path']);
-            if (empty($document['success'])) {
-                continue;
-            }
-
-            $plain = $this->plainText($document['content']);
+            $plain = isset($metadata['plain']) ? $metadata['plain'] : '';
             $score = $this->score($query, $metadata, $plain);
             if ($score <= 0) {
                 continue;
@@ -73,7 +68,94 @@ class mxLocDocSearchIndex
             'query' => $query,
             'items' => $items,
             'total' => $total,
+            'cached' => !empty($documents['cached']),
         );
+    }
+
+    protected function getIndexedDocuments()
+    {
+        $ttl = (int)$this->mxlocdoc->config['cache_ttl'];
+        if ($ttl <= 0) {
+            return $this->buildIndex();
+        }
+
+        $cacheFile = $this->getCacheFile();
+        if ($cacheFile === '') {
+            return $this->buildIndex();
+        }
+
+        if (is_file($cacheFile) && filemtime($cacheFile) + $ttl >= time()) {
+            $cached = @unserialize((string)file_get_contents($cacheFile));
+            if (is_array($cached) && !empty($cached['success']) && isset($cached['items'])) {
+                $cached['cached'] = true;
+                return $cached;
+            }
+        }
+
+        $index = $this->buildIndex();
+        if (!empty($index['success'])) {
+            $this->writeCacheFile($cacheFile, $index);
+        }
+
+        return $index;
+    }
+
+    protected function buildIndex()
+    {
+        $documents = $this->documentRepository->listAll();
+        if (empty($documents['success'])) {
+            return $documents;
+        }
+
+        $items = array();
+        foreach ($documents['items'] as $metadata) {
+            if (!empty($metadata['hidden'])) {
+                continue;
+            }
+
+            $document = $this->documentRepository->get($metadata['path']);
+            if (empty($document['success'])) {
+                continue;
+            }
+
+            $metadata['plain'] = $this->plainText($document['content']);
+            $items[] = $metadata;
+        }
+
+        return array(
+            'success' => true,
+            'items' => $items,
+            'cached' => false,
+            'language' => $this->mxlocdoc->config['language'],
+        );
+    }
+
+    protected function getCacheFile()
+    {
+        $root = $this->mxlocdoc->getPathResolver()->getRootPath();
+        if (empty($root['success'])) {
+            return '';
+        }
+
+        return $this->getCacheDirectory() . 'search-' . md5($root['path'] . '|' . $this->mxlocdoc->config['language']) . '.cache.php';
+    }
+
+    protected function getCacheDirectory()
+    {
+        return $this->mxlocdoc->getCachePath();
+    }
+
+    protected function writeCacheFile($cacheFile, array $index)
+    {
+        $directory = dirname($cacheFile);
+        if (!is_dir($directory)) {
+            @mkdir($directory, 0777, true);
+        }
+        if (!is_dir($directory) || !is_writable($directory)) {
+            return;
+        }
+
+        @file_put_contents($cacheFile, serialize($index), LOCK_EX);
     }
 
     protected function score($query, array $metadata, $plain)

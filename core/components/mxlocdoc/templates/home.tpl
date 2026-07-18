@@ -4,6 +4,9 @@
             <span aria-hidden="true"></span>
         </button>
         <div class="mxlocdoc-topbar__title" data-mxlocdoc-text="title"></div>
+        <div class="mxlocdoc-language" data-mxlocdoc-language hidden>
+            <select data-mxlocdoc-language-select></select>
+        </div>
         <div class="mxlocdoc-search" role="search">
             <input type="search" data-mxlocdoc-search data-mxlocdoc-placeholder="search_hint" autocomplete="off">
             <div class="mxlocdoc-search__results" data-mxlocdoc-search-results hidden></div>

@@ -186,6 +186,9 @@ class mxLocDocMarkdownRenderer
         if ($auth !== '') {
             $url .= '&HTTP_MODAUTH=' . rawurlencode($auth);
         }
+        if (!empty($this->mxlocdoc->config['language'])) {
+            $url .= '&language=' . rawurlencode($this->mxlocdoc->config['language']);
+        }
 
         return $url;
     }

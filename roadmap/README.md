@@ -7,11 +7,11 @@ mxLocDoc - легкий MODX 2 extra-пакет для просмотра лок
 - Платформа: MODX 2.
 - Сборщик будущего пакета: `modxbuilder`.
 - Интерфейс: lightweight manager CMP на vanilla JS/CSS, без VitePress, Node, Vue, Vite и отдельного фронтенд-билда.
-- Источник документации: локальная папка из системной настройки `mxlocdoc.docs_path`.
+- Источник документации: локальная папка из системной настройки `mxlocdoc.docs_path`; если внутри есть языковые подпапки (`en`, `ru`), manager UI показывает переключатель языка.
 - Навигация: manifest `_sidebar.json` или `mxlocdoc.json` как основной способ, fallback по файлам.
 - Контент: Markdown-рендер с безопасной обработкой HTML.
 - Картинки: относительные изображения из `.md` отдаются через защищенный connector.
-- Поиск: processor по `.md` с кешем для v1.
+- Поиск: processor по `.md` с кешем в `core/cache/mxlocdoc` для v1; очистка через MODX cache clear.
 
 ## Этапы
 
@@ -22,7 +22,7 @@ mxLocDoc - легкий MODX 2 extra-пакет для просмотра лок
 - [04. Navigation](04-navigation.md) - done.
 - [05. Markdown Assets](05-markdown-assets.md) - done.
 - [06. Manager UI](06-manager-ui.md) - done locally; live manager browser check is deferred to Hostland stand.
-- [07. Search](07-search.md) - partially done: live filesystem search works, cache/clear remains.
+- [07. Search](07-search.md) - done.
 - [08. Hostland Stand](08-hostland-stand.md)
 - [09. Release](09-release.md)
 

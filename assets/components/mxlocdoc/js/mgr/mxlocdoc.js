@@ -12,16 +12,20 @@ Ext.onReady(function () {
         activePath: '',
         documents: {},
         flatItems: [],
-        collapsedNav: loadCollapsedNav()
+        collapsedNav: loadCollapsedNav(),
+        language: selectInitialLanguage()
     };
     var lexicon = MxLocDoc.config.lexicon || {};
     var defaultFile = MxLocDoc.config.default_file || 'README.md';
+    var availableLanguages = MxLocDoc.config.languages || [];
 
     var ui = {
         shell: root.querySelector('[data-mxlocdoc-shell]'),
         sidebar: root.querySelector('[data-mxlocdoc-sidebar]'),
         sidebarOpen: root.querySelector('[data-mxlocdoc-sidebar-open]'),
         sidebarClose: root.querySelector('[data-mxlocdoc-sidebar-close]'),
+        language: root.querySelector('[data-mxlocdoc-language]'),
+        languageSelect: root.querySelector('[data-mxlocdoc-language-select]'),
         nav: root.querySelector('[data-mxlocdoc-nav]'),
         search: root.querySelector('[data-mxlocdoc-search]'),
         searchResults: root.querySelector('[data-mxlocdoc-search-results]'),
@@ -42,6 +46,9 @@ Ext.onReady(function () {
 
         if (window.MODx && MODx.siteId) {
             data.HTTP_MODAUTH = MODx.siteId;
+        }
+        if (state.language) {
+            data.language = state.language;
         }
         Object.keys(params || {}).forEach(function (key) {
             data[key] = params[key];
@@ -155,6 +162,33 @@ Ext.onReady(function () {
                 window.localStorage.setItem('mxlocdoc.collapsedNav', JSON.stringify(state.collapsedNav));
             }
         } catch (error) {}
+    }
+
+    function selectInitialLanguage() {
+        var stored = '';
+        var languages = MxLocDoc.config && MxLocDoc.config.languages ? MxLocDoc.config.languages : [];
+        var configured = MxLocDoc.config ? MxLocDoc.config.language || '' : '';
+
+        try {
+            stored = window.localStorage ? window.localStorage.getItem('mxlocdoc.language') || '' : '';
+        } catch (error) {}
+
+        return findLanguage(stored, languages) || findLanguage(configured, languages) || (languages[0] ? languages[0].code : '');
+    }
+
+    function findLanguage(language, languages) {
+        var normalized = String(language || '').toLowerCase().replace('_', '-');
+        var found = '';
+
+        (languages || []).some(function (item) {
+            if (item.code === normalized) {
+                found = item.code;
+                return true;
+            }
+            return false;
+        });
+
+        return found;
     }
 
     function navKey(item, level, index, parentKey) {
@@ -285,7 +319,8 @@ Ext.onReady(function () {
         request('mgr/navigation/get', {}, function (response) {
             var object = response.object || {};
             var items = object.items || [];
-            var initialPath = getHashPath() || firstDocument(items);
+            var requestedPath = getHashPath() || state.activePath || firstDocument(items);
+            var initialPath;
 
             if (!response.success) {
                 setState(response.message || text('navigation_error', 'Could not load navigation.'), 'error');
@@ -293,8 +328,16 @@ Ext.onReady(function () {
             }
 
             state.nav = object;
+            if (object.language) {
+                state.language = object.language;
+            }
+            if (object.languages) {
+                availableLanguages = object.languages;
+                renderLanguageSelector();
+            }
             state.flatItems = [];
             flattenItems(items, 0);
+            initialPath = findDocumentPath(requestedPath) || firstDocument(items);
             ui.nav.innerHTML = '';
             ui.nav.appendChild(renderNavigation(items, 0, ''));
 
@@ -304,7 +347,7 @@ Ext.onReady(function () {
             }
 
             if (initialPath) {
-                loadDocument(initialPath, false);
+                loadDocument(initialPath, initialPath !== requestedPath);
             }
         });
     }
@@ -360,10 +403,18 @@ Ext.onReady(function () {
         Array.prototype.forEach.call(images, function (image) {
             var src = image.getAttribute('src') || '';
             if (src.indexOf('HTTP_MODAUTH=') !== -1) {
-                return;
+                if (!state.language || src.indexOf('language=') !== -1) {
+                    return;
+                }
             }
 
-            image.setAttribute('src', src + (src.indexOf('?') === -1 ? '?' : '&') + 'HTTP_MODAUTH=' + encodeURIComponent(auth));
+            if (src.indexOf('HTTP_MODAUTH=') === -1) {
+                src += (src.indexOf('?') === -1 ? '?' : '&') + 'HTTP_MODAUTH=' + encodeURIComponent(auth);
+            }
+            if (state.language && src.indexOf('language=') === -1) {
+                src += (src.indexOf('?') === -1 ? '?' : '&') + 'language=' + encodeURIComponent(state.language);
+            }
+            image.setAttribute('src', src);
         });
     }
 
@@ -571,6 +622,18 @@ Ext.onReady(function () {
     if (ui.search) {
         ui.search.addEventListener('input', handleSearchInput);
     }
+    if (ui.languageSelect) {
+        ui.languageSelect.addEventListener('change', function () {
+            state.language = ui.languageSelect.value;
+            try {
+                if (window.localStorage) {
+                    window.localStorage.setItem('mxlocdoc.language', state.language);
+                }
+            } catch (error) {}
+            renderSearchResults([]);
+            loadNavigation();
+        });
+    }
     window.addEventListener('hashchange', function () {
         var path = getHashPath();
         if (path && path !== state.activePath) {
@@ -578,9 +641,27 @@ Ext.onReady(function () {
         }
     });
 
+    renderLanguageSelector();
     hydrateLexicon();
     root.classList.add('mxlocdoc-ready');
     loadNavigation();
+
+    function renderLanguageSelector() {
+        if (!ui.language || !ui.languageSelect) {
+            return;
+        }
+
+        ui.language.hidden = availableLanguages.length <= 1;
+        ui.languageSelect.innerHTML = '';
+        availableLanguages.forEach(function (language) {
+            var option = document.createElement('option');
+
+            option.value = language.code;
+            option.textContent = language.label || language.code.toUpperCase();
+            option.selected = language.code === state.language;
+            ui.languageSelect.appendChild(option);
+        });
+    }
 
     function handleSearchInput() {
         var query = String(ui.search.value || '').trim();
