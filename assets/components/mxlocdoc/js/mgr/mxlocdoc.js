@@ -146,10 +146,15 @@ Ext.onReady(function () {
             var node;
 
             li.className = 'mxlocdoc-nav__item';
+            li.classList.add('mxlocdoc-nav__item--level-' + Math.min(level, 4));
+            if (item.children && item.children.length) {
+                li.classList.add('has-children');
+            }
             if (item.path) {
                 node = document.createElement('button');
                 node.type = 'button';
                 node.className = 'mxlocdoc-nav__link';
+                node.classList.add('mxlocdoc-nav__node--level-' + Math.min(level, 4));
                 node.dataset.path = item.path;
                 node.textContent = item.title || item.path;
                 node.title = item.path;
@@ -161,6 +166,7 @@ Ext.onReady(function () {
             } else {
                 node = document.createElement('div');
                 node.className = 'mxlocdoc-nav__section';
+                node.classList.add('mxlocdoc-nav__node--level-' + Math.min(level, 4));
                 node.textContent = item.title || '';
                 li.dataset.search = String(item.title || '').toLowerCase();
             }
