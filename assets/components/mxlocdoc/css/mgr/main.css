@@ -180,6 +180,7 @@
 }
 
 .mxlocdoc-nav__item {
+    position: relative;
     margin: 1px 0;
 }
 
@@ -248,11 +249,24 @@
     padding-left: 88px;
 }
 
-.mxlocdoc-nav__item.has-children > .mxlocdoc-nav__link::before,
-.mxlocdoc-nav__item.has-children > .mxlocdoc-nav__section::before {
+.mxlocdoc-nav__toggle {
     position: absolute;
-    top: 12px;
-    left: 8px;
+    z-index: 1;
+    top: 5px;
+    left: 4px;
+    width: 20px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #5f6f80;
+    cursor: pointer;
+}
+
+.mxlocdoc-nav__toggle::before {
+    position: absolute;
+    top: 7px;
+    left: 6px;
     width: 7px;
     height: 7px;
     border-right: 2px solid currentColor;
@@ -260,23 +274,28 @@
     opacity: 0.75;
     content: "";
     transform: rotate(45deg);
+    transition: transform 0.12s ease;
 }
 
-.mxlocdoc-nav__item--level-1.has-children > .mxlocdoc-nav__link::before,
-.mxlocdoc-nav__item--level-1.has-children > .mxlocdoc-nav__section::before {
-    left: 30px;
+.mxlocdoc-nav__item.is-collapsed > .mxlocdoc-nav__toggle::before {
+    transform: rotate(-45deg);
 }
 
-.mxlocdoc-nav__item--level-2.has-children > .mxlocdoc-nav__link::before,
-.mxlocdoc-nav__item--level-2.has-children > .mxlocdoc-nav__section::before {
-    left: 52px;
+.mxlocdoc-nav__item--level-1 > .mxlocdoc-nav__toggle {
+    left: 26px;
 }
 
-.mxlocdoc-nav__item--level-3.has-children > .mxlocdoc-nav__link::before,
-.mxlocdoc-nav__item--level-3.has-children > .mxlocdoc-nav__section::before,
-.mxlocdoc-nav__item--level-4.has-children > .mxlocdoc-nav__link::before,
-.mxlocdoc-nav__item--level-4.has-children > .mxlocdoc-nav__section::before {
-    left: 74px;
+.mxlocdoc-nav__item--level-2 > .mxlocdoc-nav__toggle {
+    left: 48px;
+}
+
+.mxlocdoc-nav__item--level-3 > .mxlocdoc-nav__toggle,
+.mxlocdoc-nav__item--level-4 > .mxlocdoc-nav__toggle {
+    left: 70px;
+}
+
+.mxlocdoc-nav__item.is-collapsed > .mxlocdoc-nav__children {
+    display: none;
 }
 
 .mxlocdoc-nav__item--level-1 > .mxlocdoc-nav__link::after,

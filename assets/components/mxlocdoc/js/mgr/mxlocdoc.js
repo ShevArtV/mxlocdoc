@@ -11,7 +11,8 @@ Ext.onReady(function () {
         nav: null,
         activePath: '',
         documents: {},
-        flatItems: []
+        flatItems: [],
+        collapsedNav: loadCollapsedNav()
     };
     var lexicon = MxLocDoc.config.lexicon || {};
 
@@ -137,18 +138,68 @@ Ext.onReady(function () {
         });
     }
 
-    function renderNavigation(items, level) {
+    function loadCollapsedNav() {
+        var stored;
+
+        try {
+            stored = window.localStorage ? window.localStorage.getItem('mxlocdoc.collapsedNav') : '';
+            return stored ? JSON.parse(stored) : {};
+        } catch (error) {
+            return {};
+        }
+    }
+
+    function saveCollapsedNav() {
+        try {
+            if (window.localStorage) {
+                window.localStorage.setItem('mxlocdoc.collapsedNav', JSON.stringify(state.collapsedNav));
+            }
+        } catch (error) {}
+    }
+
+    function navKey(item, level, index, parentKey) {
+        var value = item.path || item.title || String(index);
+
+        return [parentKey || 'root', level, value].join('|');
+    }
+
+    function setNavCollapsed(item, collapsed, persist) {
+        var key = item.getAttribute('data-nav-key');
+        var toggle = item.querySelector(':scope > .mxlocdoc-nav__toggle');
+
+        item.classList.toggle('is-collapsed', collapsed);
+        if (toggle) {
+            toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+        }
+        if (persist && key) {
+            if (collapsed) {
+                state.collapsedNav[key] = true;
+            } else {
+                delete state.collapsedNav[key];
+            }
+            saveCollapsedNav();
+        }
+    }
+
+    function renderNavigation(items, level, parentKey) {
         var list = document.createElement('ul');
         list.className = level === 0 ? 'mxlocdoc-nav__list' : 'mxlocdoc-nav__children';
 
-        (items || []).forEach(function (item) {
+        (items || []).forEach(function (item, index) {
+            var hasChildren = !!(item.children && item.children.length);
+            var key = navKey(item, level, index, parentKey);
             var li = document.createElement('li');
             var node;
+            var toggle;
 
             li.className = 'mxlocdoc-nav__item';
             li.classList.add('mxlocdoc-nav__item--level-' + Math.min(level, 4));
-            if (item.children && item.children.length) {
+            li.setAttribute('data-nav-key', key);
+            if (hasChildren) {
                 li.classList.add('has-children');
+                if (state.collapsedNav[key]) {
+                    li.classList.add('is-collapsed');
+                }
             }
             if (item.path) {
                 node = document.createElement('button');
@@ -171,9 +222,22 @@ Ext.onReady(function () {
                 li.dataset.search = String(item.title || '').toLowerCase();
             }
 
+            if (hasChildren) {
+                toggle = document.createElement('button');
+                toggle.type = 'button';
+                toggle.className = 'mxlocdoc-nav__toggle';
+                toggle.setAttribute('aria-label', 'Toggle section');
+                toggle.setAttribute('aria-expanded', li.classList.contains('is-collapsed') ? 'false' : 'true');
+                toggle.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setNavCollapsed(li, !li.classList.contains('is-collapsed'), true);
+                });
+                li.appendChild(toggle);
+            }
             li.appendChild(node);
-            if (item.children && item.children.length) {
-                li.appendChild(renderNavigation(item.children, level + 1));
+            if (hasChildren) {
+                li.appendChild(renderNavigation(item.children, level + 1, key));
             }
             list.appendChild(li);
         });
@@ -189,7 +253,12 @@ Ext.onReady(function () {
 
         var items = ui.nav.querySelectorAll('.mxlocdoc-nav__item');
         Array.prototype.forEach.call(items, function (item) {
-            item.classList.toggle('is-active-branch', !!item.querySelector('.mxlocdoc-nav__link.is-active'));
+            var isActiveBranch = !!item.querySelector('.mxlocdoc-nav__link.is-active');
+
+            item.classList.toggle('is-active-branch', isActiveBranch);
+            if (isActiveBranch && item.classList.contains('is-collapsed')) {
+                setNavCollapsed(item, false, false);
+            }
         });
     }
 
@@ -227,7 +296,7 @@ Ext.onReady(function () {
             state.flatItems = [];
             flattenItems(items, 0);
             ui.nav.innerHTML = '';
-            ui.nav.appendChild(renderNavigation(items, 0));
+            ui.nav.appendChild(renderNavigation(items, 0, ''));
 
             if (!items.length) {
                 setState(text('documents_empty', 'No documents found.'), 'empty');
