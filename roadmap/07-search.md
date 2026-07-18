@@ -1,26 +1,28 @@
 # 07. Search
 
+Status: partially done on 2026-07-18. Live filesystem search by title/path/body is implemented after stand feedback; cache/clear remains.
+
 ## Цель
 
 Добавить быстрый поиск по Markdown-документации без DB-индекса в v1.
 
 ## Что сделать
 
-- Реализовать processor `search`.
-- Искать по title, headings, body и path.
-- Возвращать сниппеты результатов.
-- Сделать live-search в manager UI.
+- [x] Реализовать processor `search`.
+- [x] Искать по title, headings, body и path.
+- [x] Возвращать сниппеты результатов.
+- [x] Сделать live-search в manager UI.
 - Кешировать подготовленные данные в `core/cache/mxlocdoc` для v1.
 - Добавить механизм cache clear.
 
 ## Куда именно
 
-- Будущий processor:
+- Processor:
   - `core/components/mxlocdoc/processors/mgr/search.class.php`
-- Будущие сервисы:
-  - `core/components/mxlocdoc/services/SearchIndex.php`
-  - `core/components/mxlocdoc/services/DocumentRepository.php`
-  - `core/components/mxlocdoc/services/MarkdownRenderer.php`
+- Services:
+  - `core/components/mxlocdoc/services/searchindex.class.php`
+  - `core/components/mxlocdoc/services/documentrepository.class.php`
+  - `core/components/mxlocdoc/services/markdownrenderer.class.php`
 - Будущий cache:
   - `core/cache/mxlocdoc/`
 - Будущий UI:

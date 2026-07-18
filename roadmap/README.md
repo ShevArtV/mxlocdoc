@@ -22,7 +22,7 @@ mxLocDoc - легкий MODX 2 extra-пакет для просмотра лок
 - [04. Navigation](04-navigation.md) - done.
 - [05. Markdown Assets](05-markdown-assets.md) - done.
 - [06. Manager UI](06-manager-ui.md) - done locally; live manager browser check is deferred to Hostland stand.
-- [07. Search](07-search.md) - next.
+- [07. Search](07-search.md) - partially done: live filesystem search works, cache/clear remains.
 - [08. Hostland Stand](08-hostland-stand.md)
 - [09. Release](09-release.md)
 

@@ -4,8 +4,8 @@ Lightweight MODX Revolution 2 extra for reading local Markdown documentation ins
 
 Current status: package skeleton with system settings, secure filesystem
 services, Markdown navigation, safe Markdown rendering with protected asset
-URLs, and a vanilla JS/CSS manager docs UI. Full-text search is still a roadmap
-item.
+URLs, a vanilla JS/CSS manager docs UI, and basic filesystem live-search.
+Search cache/clear polish is still a roadmap item.
 
 ## Core Decisions
 
@@ -17,7 +17,7 @@ item.
 - Navigation comes from `_sidebar.json` or `mxlocdoc.json`, with filesystem fallback.
 - Markdown is rendered server-side with safe HTML handling.
 - Relative Markdown images are served through a protected connector.
-- Search scans `.md` files and may use cache in v1.
+- Search scans `.md` files by title, path and body; cache/clear polish remains for v1.
 - Markdown rendering uses vendored Parsedown in safe mode.
 
 ## Roadmap
@@ -31,7 +31,7 @@ The implementation plan is in [`roadmap/`](roadmap/):
 - [`04-navigation.md`](roadmap/04-navigation.md) — done.
 - [`05-markdown-assets.md`](roadmap/05-markdown-assets.md) — done.
 - [`06-manager-ui.md`](roadmap/06-manager-ui.md) — done locally; live manager browser check is deferred to Hostland stand.
-- [`07-search.md`](roadmap/07-search.md) — next.
+- [`07-search.md`](roadmap/07-search.md) — partially done: live filesystem search works, cache/clear remains.
 
 ## License
 

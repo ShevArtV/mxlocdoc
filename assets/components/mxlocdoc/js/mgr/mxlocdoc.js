@@ -23,6 +23,7 @@ Ext.onReady(function () {
         nav: root.querySelector('[data-mxlocdoc-nav]'),
         search: root.querySelector('[data-mxlocdoc-search]'),
         searchHint: root.querySelector('[data-mxlocdoc-search-hint]'),
+        searchResults: root.querySelector('[data-mxlocdoc-search-results]'),
         state: root.querySelector('[data-mxlocdoc-state]'),
         breadcrumbs: root.querySelector('[data-mxlocdoc-breadcrumbs]'),
         article: root.querySelector('[data-mxlocdoc-article]'),
@@ -30,6 +31,7 @@ Ext.onReady(function () {
         toc: root.querySelector('[data-mxlocdoc-toc]'),
         tocList: root.querySelector('[data-mxlocdoc-toc-list]')
     };
+    var searchTimer = null;
 
     function request(action, params, callback) {
         var xhr = new XMLHttpRequest();
@@ -266,9 +268,27 @@ Ext.onReady(function () {
     function renderDocument(documentData) {
         renderBreadcrumbs(documentData.path || state.activePath);
         ui.article.innerHTML = documentData.html || '';
+        authorizeAssetUrls();
         wireArticleLinks();
         prepareHeadings();
         renderWarnings(documentData.warnings || []);
+    }
+
+    function authorizeAssetUrls() {
+        var auth = window.MODx && MODx.siteId ? MODx.siteId : '';
+        if (!auth) {
+            return;
+        }
+
+        var images = ui.article.querySelectorAll('img[data-mxlocdoc-asset-path]');
+        Array.prototype.forEach.call(images, function (image) {
+            var src = image.getAttribute('src') || '';
+            if (src.indexOf('HTTP_MODAUTH=') !== -1) {
+                return;
+            }
+
+            image.setAttribute('src', src + (src.indexOf('?') === -1 ? '?' : '&') + 'HTTP_MODAUTH=' + encodeURIComponent(auth));
+        });
     }
 
     function renderBreadcrumbs(path) {
@@ -378,7 +398,7 @@ Ext.onReady(function () {
         ui.sidebarClose.addEventListener('click', closeSidebar);
     }
     if (ui.search) {
-        ui.search.addEventListener('input', filterNavigation);
+        ui.search.addEventListener('input', handleSearchInput);
     }
     window.addEventListener('hashchange', function () {
         var path = getHashPath();
@@ -410,5 +430,75 @@ Ext.onReady(function () {
 
             item.hidden = !(selfMatched || childMatched);
         }
+    }
+
+    function handleSearchInput() {
+        var query = String(ui.search.value || '').trim();
+        filterNavigation();
+
+        if (searchTimer) {
+            window.clearTimeout(searchTimer);
+        }
+        if (query.length < 2) {
+            renderSearchResults([]);
+            return;
+        }
+
+        searchTimer = window.setTimeout(function () {
+            runSearch(query);
+        }, 220);
+    }
+
+    function runSearch(query) {
+        request('mgr/search', {query: query, limit: 12}, function (response) {
+            var object = response.object || {};
+
+            if (!response.success) {
+                renderSearchError(response.message || text('search_error', 'Search failed.'));
+                return;
+            }
+
+            renderSearchResults(object.items || []);
+        });
+    }
+
+    function renderSearchResults(items) {
+        if (!ui.searchResults) {
+            return;
+        }
+
+        if (!items.length) {
+            var query = ui.search ? String(ui.search.value || '').trim() : '';
+            ui.searchResults.innerHTML = query.length >= 2
+                ? '<div class="mxlocdoc-search-result mxlocdoc-search-result--empty">' + escapeHtml(text('search_empty', 'No results found.')) + '</div>'
+                : '';
+            ui.searchResults.hidden = query.length < 2;
+            return;
+        }
+
+        ui.searchResults.innerHTML = items.map(function (item) {
+            return '<button type="button" class="mxlocdoc-search-result" data-path="' + escapeHtml(item.path) + '">' +
+                '<span class="mxlocdoc-search-result__title">' + escapeHtml(item.title || item.path) + '</span>' +
+                '<span class="mxlocdoc-search-result__path">' + escapeHtml(item.path) + '</span>' +
+                '<span class="mxlocdoc-search-result__snippet">' + escapeHtml(item.snippet || '') + '</span>' +
+                '</button>';
+        }).join('');
+        ui.searchResults.hidden = false;
+
+        Array.prototype.forEach.call(ui.searchResults.querySelectorAll('[data-path]'), function (button) {
+            button.addEventListener('click', function () {
+                loadDocument(button.getAttribute('data-path'), true);
+                ui.searchResults.hidden = true;
+            });
+        });
+    }
+
+    function renderSearchError(message) {
+        if (!ui.searchResults) {
+            return;
+        }
+
+        ui.searchResults.innerHTML = '<div class="mxlocdoc-search-result mxlocdoc-search-result--empty">' + escapeHtml(message) + '</div>';
+        ui.searchResults.hidden = false;
     }
 });

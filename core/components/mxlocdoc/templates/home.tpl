@@ -18,6 +18,7 @@
                 <div class="mxlocdoc-search" role="search">
                     <input type="search" data-mxlocdoc-search data-mxlocdoc-placeholder="search_placeholder" autocomplete="off">
                     <div class="mxlocdoc-search__hint" data-mxlocdoc-search-hint data-mxlocdoc-text="search_hint"></div>
+                    <div class="mxlocdoc-search__results" data-mxlocdoc-search-results hidden></div>
                 </div>
             </header>
 

@@ -27,6 +27,9 @@ class mxLocDoc
     /** @var mxLocDocMarkdownRenderer */
     protected $markdownRenderer;
 
+    /** @var mxLocDocSearchIndex */
+    protected $searchIndex;
+
     public function __construct(modX &$modx, array $config = array())
     {
         $this->modx =& $modx;
@@ -135,6 +138,19 @@ class mxLocDoc
         }
 
         return $this->markdownRenderer;
+    }
+
+    /**
+     * @return mxLocDocSearchIndex
+     */
+    public function getSearchIndex()
+    {
+        if (!$this->searchIndex) {
+            require_once $this->config['core_path'] . 'services/searchindex.class.php';
+            $this->searchIndex = new mxLocDocSearchIndex($this->modx, $this, $this->getDocumentRepository());
+        }
+
+        return $this->searchIndex;
     }
 
     /**

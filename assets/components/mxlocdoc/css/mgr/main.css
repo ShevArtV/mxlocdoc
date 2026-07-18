@@ -79,6 +79,65 @@
     font-size: 12px;
 }
 
+.mxlocdoc-search__results {
+    position: absolute;
+    z-index: 12;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    max-height: 360px;
+    overflow: auto;
+    border: 1px solid #c9d1dc;
+    border-radius: 4px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(23, 33, 43, 0.16);
+}
+
+.mxlocdoc-search-result {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: 0;
+    border-bottom: 1px solid #edf0f3;
+    background: #ffffff;
+    color: #2f3a45;
+    text-align: left;
+    cursor: pointer;
+}
+
+.mxlocdoc-search-result:hover,
+.mxlocdoc-search-result:focus {
+    background: #edf4fb;
+}
+
+.mxlocdoc-search-result--empty {
+    cursor: default;
+    color: #66788a;
+}
+
+.mxlocdoc-search-result__title,
+.mxlocdoc-search-result__path,
+.mxlocdoc-search-result__snippet {
+    display: block;
+    overflow-wrap: anywhere;
+}
+
+.mxlocdoc-search-result__title {
+    font-weight: 700;
+}
+
+.mxlocdoc-search-result__path {
+    margin-top: 2px;
+    color: #66788a;
+    font-size: 12px;
+}
+
+.mxlocdoc-search-result__snippet {
+    margin-top: 5px;
+    color: #51606f;
+    font-size: 12px;
+}
+
 .mxlocdoc-content-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 220px;

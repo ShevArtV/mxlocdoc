@@ -69,6 +69,8 @@ class mxLocDocIndexManagerController extends modExtraManagerController
                     'close_navigation' => $this->modx->lexicon('mxlocdoc_close_navigation'),
                     'search_placeholder' => $this->modx->lexicon('mxlocdoc_search_placeholder'),
                     'search_hint' => $this->modx->lexicon('mxlocdoc_search_coming_soon'),
+                    'search_empty' => $this->modx->lexicon('mxlocdoc_search_empty'),
+                    'search_error' => $this->modx->lexicon('mxlocdoc_search_error'),
                     'loading' => $this->modx->lexicon('mxlocdoc_loading'),
                     'breadcrumbs' => $this->modx->lexicon('mxlocdoc_breadcrumbs'),
                     'toc' => $this->modx->lexicon('mxlocdoc_toc'),
