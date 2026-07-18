@@ -76,6 +76,12 @@ class mxLocDocPathResolver
             return $this->languages;
         }
 
+        $configured = $this->getConfiguredLanguages();
+        if (empty($configured)) {
+            $this->languages = array();
+            return $this->languages;
+        }
+
         $base = $this->getBasePath();
         if (!$base['success']) {
             $this->languages = array();
@@ -83,26 +89,33 @@ class mxLocDocPathResolver
         }
 
         $languages = array();
-        $entries = scandir($base['path']);
-        if ($entries !== false) {
-            foreach ($entries as $entry) {
-                if (!preg_match('/^[a-z]{2}(?:-[a-z0-9]{2,8})?$/i', $entry)) {
-                    continue;
-                }
-                $path = $base['path'] . $entry . DIRECTORY_SEPARATOR;
-                if (is_dir($path) && $this->hasDocumentationFiles($path)) {
-                    $code = strtolower($entry);
-                    $languages[$code] = array(
-                        'code' => $code,
-                        'label' => strtoupper($code),
-                    );
-                }
+        foreach ($configured as $code) {
+            $path = $base['path'] . $code . DIRECTORY_SEPARATOR;
+            if (is_dir($path) && $this->hasDocumentationFiles($path)) {
+                $languages[$code] = array(
+                    'code' => $code,
+                    'label' => strtoupper($code),
+                );
             }
         }
 
         ksort($languages);
         $this->languages = $languages;
         return $this->languages;
+    }
+
+    protected function getConfiguredLanguages()
+    {
+        $result = array();
+        $configured = isset($this->mxlocdoc->config['languages']) ? $this->mxlocdoc->config['languages'] : array();
+        foreach ((array)$configured as $code) {
+            $code = $this->mxlocdoc->normalizeLanguage($code);
+            if ($code !== '' && !in_array($code, $result, true)) {
+                $result[] = $code;
+            }
+        }
+
+        return $result;
     }
 
     public function resolveFile($path)

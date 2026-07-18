@@ -1,6 +1,14 @@
 mxLocDoc Changelog
 ==================
 
+1.0.0-pl
+--------
+
+- Harden search cache: store the prepared index as a guarded PHP file (`<?php return ...;`) instead of a raw serialized payload, so an exposed cache directory cannot leak documentation text as plain output.
+- Respect front matter `hidden: true` for manifest-listed navigation pages, matching the filesystem fallback contract.
+- Fix search snippet offsets for multibyte (UTF-8) text by using multibyte-aware position and length calculations.
+- Make multilingual mode explicit via the new `mxlocdoc.languages` system setting (comma-separated language codes, `en,ru` by default); an empty value disables language auto-detection so a plain two-letter folder no longer hijacks the docs tree.
+
 0.1.0-pl
 --------
 

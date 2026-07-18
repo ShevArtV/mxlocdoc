@@ -60,6 +60,7 @@ class mxLocDoc
             'connector_url' => $assetsUrl . 'connector.php',
             'docs_path' => $this->getOption('docs_path', '[[+corePath]]components/mxlocdoc/docs/'),
             'language' => $this->normalizeLanguage(isset($config['language']) ? $config['language'] : $this->modx->getOption('manager_language', null, $this->modx->getOption('cultureKey', null, 'en'))),
+            'languages' => $this->getListOption('languages', array('en', 'ru')),
             'default_file' => $this->getOption('default_file', 'README.md'),
             'nav_file' => $this->getOption('nav_file', '_sidebar.json'),
             'search_enabled' => $this->getBooleanOption('search_enabled', true),

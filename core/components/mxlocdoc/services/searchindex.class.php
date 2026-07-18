@@ -85,7 +85,7 @@ class mxLocDocSearchIndex
         }
 
         if (is_file($cacheFile) && filemtime($cacheFile) + $ttl >= time()) {
-            $cached = @unserialize((string)file_get_contents($cacheFile));
+            $cached = $this->readCacheFile($cacheFile);
             if (is_array($cached) && !empty($cached['success']) && isset($cached['items'])) {
                 $cached['cached'] = true;
                 return $cached;
@@ -155,7 +155,18 @@ class mxLocDocSearchIndex
             return;
         }
 
-        @file_put_contents($cacheFile, serialize($index), LOCK_EX);
+        @file_put_contents($cacheFile, '<?php return ' . var_export($index, true) . ';' . "\n", LOCK_EX);
+    }
+
+    protected function readCacheFile($cacheFile)
+    {
+        try {
+            $data = @include $cacheFile;
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        return is_array($data) ? $data : null;
     }
 
     protected function score($query, array $metadata, $plain)
@@ -186,7 +197,7 @@ class mxLocDocSearchIndex
         }
 
         $lower = $this->lower($plain);
-        $position = strpos($lower, $query);
+        $position = $this->indexOf($lower, $query);
         if ($position === false) {
             return $this->cut($plain, 0, 180);
         }
@@ -194,7 +205,16 @@ class mxLocDocSearchIndex
         $start = max(0, $position - 70);
         $snippet = $this->cut($plain, $start, 180);
 
-        return ($start > 0 ? '...' : '') . $snippet . (strlen($plain) > $start + 180 ? '...' : '');
+        return ($start > 0 ? '...' : '') . $snippet . ($this->length($plain) > $start + 180 ? '...' : '');
+    }
+
+    protected function indexOf($haystack, $needle)
+    {
+        if (function_exists('mb_strpos')) {
+            return mb_strpos((string)$haystack, (string)$needle, 0, 'UTF-8');
+        }
+
+        return strpos((string)$haystack, (string)$needle);
     }
 
     protected function plainText($content)

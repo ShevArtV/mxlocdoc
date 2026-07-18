@@ -13,6 +13,11 @@ $definitions = array(
         'xtype' => 'textfield',
         'area' => 'mxlocdoc:filesystem',
     ),
+    'mxlocdoc.languages' => array(
+        'value' => 'en,ru',
+        'xtype' => 'textfield',
+        'area' => 'mxlocdoc:navigation',
+    ),
     'mxlocdoc.default_file' => array(
         'value' => 'README.md',
         'xtype' => 'textfield',

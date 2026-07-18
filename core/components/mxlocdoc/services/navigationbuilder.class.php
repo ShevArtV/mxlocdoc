@@ -141,6 +141,9 @@ class mxLocDocNavigationBuilder
             if (!$metadata['success']) {
                 return false;
             }
+            if (!empty($metadata['hidden'])) {
+                return null;
+            }
         }
 
         $title = isset($item['title']) ? trim((string)$item['title']) : '';
