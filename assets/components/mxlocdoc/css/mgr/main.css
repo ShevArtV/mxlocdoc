@@ -1,4 +1,6 @@
 .mxlocdoc-app {
+    display: flex;
+    flex-direction: column;
     min-height: 560px;
     background: #f4f6f8;
     border: 1px solid #d8dde3;
@@ -15,8 +17,10 @@
 
 .mxlocdoc-shell {
     display: grid;
-    grid-template-columns: 280px minmax(0, 1fr);
-    min-height: 560px;
+    grid-template-columns: 280px minmax(0, 1fr) 280px;
+    height: calc(100vh - 150px);
+    min-height: 504px;
+    overflow: hidden;
 }
 
 .mxlocdoc-sidebar {
@@ -43,10 +47,6 @@
     font-weight: 700;
 }
 
-.mxlocdoc-main {
-    min-width: 0;
-}
-
 .mxlocdoc-topbar {
     display: flex;
     align-items: center;
@@ -57,9 +57,19 @@
     border-bottom: 1px solid #d8dde3;
 }
 
+.mxlocdoc-topbar__title {
+    flex: 0 0 auto;
+    color: #1f2933;
+    font-size: 17px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
 .mxlocdoc-search {
     position: relative;
-    width: min(520px, 100%);
+    flex: 1 1 420px;
+    max-width: 620px;
+    min-width: 220px;
 }
 
 .mxlocdoc-search input {
@@ -136,15 +146,6 @@
     margin-top: 5px;
     color: #51606f;
     font-size: 12px;
-}
-
-.mxlocdoc-content-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 220px;
-    gap: 0;
-    height: calc(100vh - 150px);
-    min-height: 504px;
-    overflow: hidden;
 }
 
 .mxlocdoc-document-panel {
@@ -637,8 +638,7 @@
         display: inline-block;
     }
 
-    .mxlocdoc-content-grid {
-        grid-template-columns: 1fr;
+    .mxlocdoc-shell {
         height: auto;
         overflow: visible;
     }
@@ -656,6 +656,17 @@
 
     .mxlocdoc-topbar {
         align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .mxlocdoc-topbar__title {
+        min-height: 36px;
+        line-height: 36px;
+    }
+
+    .mxlocdoc-search {
+        flex-basis: 100%;
+        max-width: none;
     }
 
     .mxlocdoc-document-panel {
