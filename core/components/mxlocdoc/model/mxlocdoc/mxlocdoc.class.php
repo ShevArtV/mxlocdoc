@@ -21,6 +21,9 @@ class mxLocDoc
     /** @var mxLocDocAssetRepository */
     protected $assetRepository;
 
+    /** @var mxLocDocNavigationBuilder */
+    protected $navigationBuilder;
+
     public function __construct(modX &$modx, array $config = array())
     {
         $this->modx =& $modx;
@@ -103,6 +106,19 @@ class mxLocDoc
         }
 
         return $this->assetRepository;
+    }
+
+    /**
+     * @return mxLocDocNavigationBuilder
+     */
+    public function getNavigationBuilder()
+    {
+        if (!$this->navigationBuilder) {
+            require_once $this->config['core_path'] . 'services/navigationbuilder.class.php';
+            $this->navigationBuilder = new mxLocDocNavigationBuilder($this->modx, $this, $this->getPathResolver(), $this->getDocumentRepository());
+        }
+
+        return $this->navigationBuilder;
     }
 
     /**

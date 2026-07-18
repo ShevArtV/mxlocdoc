@@ -70,6 +70,36 @@ class mxLocDocPathResolver
         return $this->success($fullPath, $this->getRelativePath($fullPath, $root['path']));
     }
 
+    public function resolveDirectory($path = '')
+    {
+        $root = $this->getRootPath();
+        if (!$root['success']) {
+            return $root;
+        }
+
+        $relativePath = $this->normalizeRelativePath($path);
+        if ($relativePath !== '' && $this->hasUnsafePathSegments($relativePath)) {
+            return $this->failure('path_invalid', $this->modx->lexicon('mxlocdoc_error_path_invalid'));
+        }
+
+        $fullPath = realpath($root['path'] . $relativePath);
+        if ($fullPath === false || !is_dir($fullPath)) {
+            return $this->failure('directory_not_found', $this->modx->lexicon('mxlocdoc_error_directory_not_found'));
+        }
+
+        $fullPath = rtrim($this->normalizeDirectorySeparators($fullPath), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        if (!$this->isInsideRoot($fullPath, $root['path']) && $fullPath !== $root['path']) {
+            return $this->failure('path_outside_root', $this->modx->lexicon('mxlocdoc_error_path_outside_root'));
+        }
+
+        return $this->success($fullPath, $this->getRelativePath($fullPath, $root['path']));
+    }
+
+    public function normalizeDocumentPath($path)
+    {
+        return $this->normalizeRelativePath($path);
+    }
+
     public function normalizeExtension($path)
     {
         return strtolower((string)pathinfo((string)$path, PATHINFO_EXTENSION));

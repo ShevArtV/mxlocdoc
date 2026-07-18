@@ -2,8 +2,8 @@
 
 Lightweight MODX Revolution 2 extra for reading local Markdown documentation inside the MODX manager.
 
-Current status: package skeleton with system settings and secure filesystem
-services. Markdown navigation, rendering, assets wiring and search are still
+Current status: package skeleton with system settings, secure filesystem
+services and Markdown navigation. Rendering, assets wiring and search are still
 roadmap items.
 
 ## Core Decisions
@@ -26,7 +26,8 @@ The implementation plan is in [`roadmap/`](roadmap/):
 - [`01-package-skeleton.md`](roadmap/01-package-skeleton.md) — done.
 - [`02-system-settings.md`](roadmap/02-system-settings.md) — done.
 - [`03-secure-filesystem.md`](roadmap/03-secure-filesystem.md) — done.
-- [`04-navigation.md`](roadmap/04-navigation.md) — next.
+- [`04-navigation.md`](roadmap/04-navigation.md) — done.
+- [`05-markdown-assets.md`](roadmap/05-markdown-assets.md) — next.
 
 ## License
 

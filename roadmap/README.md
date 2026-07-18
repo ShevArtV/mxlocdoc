@@ -19,8 +19,8 @@ mxLocDoc - легкий MODX 2 extra-пакет для просмотра лок
 - [01. Package Skeleton](01-package-skeleton.md) - done.
 - [02. System Settings](02-system-settings.md) - done.
 - [03. Secure Filesystem](03-secure-filesystem.md) - done.
-- [04. Navigation](04-navigation.md) - next.
-- [05. Markdown Assets](05-markdown-assets.md)
+- [04. Navigation](04-navigation.md) - done.
+- [05. Markdown Assets](05-markdown-assets.md) - next.
 - [06. Manager UI](06-manager-ui.md)
 - [07. Search](07-search.md)
 - [08. Hostland Stand](08-hostland-stand.md)
