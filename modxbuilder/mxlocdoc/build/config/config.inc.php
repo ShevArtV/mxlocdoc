@@ -14,7 +14,7 @@ $buildConfig = array(
     'real_package_name' => 'mxLocDoc',
     'package_name' => 'mxlocdoc',
     'package_version' => '0.1.0',
-    'package_release' => 'dev',
+    'package_release' => 'pl',
     'package_table_prefix' => 'mxlocdoc_',
     'package_class_prefix' => 'mxlocdoc',
 

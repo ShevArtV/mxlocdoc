@@ -28,9 +28,10 @@ $event->fromArray(array(
     'propertyset' => 0,
 ), '', true, true);
 
-$plugin->addMany(array($event));
+$events = array($event);
+$plugin->addMany($events);
 $plugins[] = $plugin;
 
-unset($plugin, $event);
+unset($plugin, $event, $events);
 
 return $plugins;
