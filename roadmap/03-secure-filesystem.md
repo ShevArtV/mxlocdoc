@@ -1,30 +1,32 @@
 # 03. Secure Filesystem
 
+Status: done, 2026-07-18.
+
 ## Цель
 
 Спроектировать безопасный слой доступа к локальной документации, чтобы manager UI не мог читать файлы за пределами `mxlocdoc.docs_path`.
 
 ## Что сделать
 
-- Реализовать `PathResolver` для нормализации и проверки путей.
-- Реализовать `DocumentRepository` для чтения `.md` файлов.
-- Реализовать `AssetRepository` для отдачи картинок и разрешенных ассетов.
-- Использовать `realpath` для корня документации и каждого запрошенного файла.
-- Запретить выход за `docs_path`.
-- Ограничить расширения `.md` и asset-файлов whitelist-ом.
-- Проверять max size до чтения файла.
-- Возвращать понятные ошибки для manager UI.
+- Реализован `PathResolver` для нормализации и проверки путей.
+- Реализован `DocumentRepository` для чтения `.md` файлов.
+- Реализован `AssetRepository` для отдачи картинок и разрешенных ассетов.
+- Используется `realpath` для корня документации и каждого запрошенного файла.
+- Запрещен выход за `docs_path`.
+- Ограничены расширения `.md` и asset-файлов whitelist-ом.
+- Проверяется max size до чтения файла.
+- Возвращаются понятные ошибки для manager UI.
 
 ## Куда именно
 
-- Будущие сервисы:
-  - `core/components/mxlocdoc/services/PathResolver.php`
-  - `core/components/mxlocdoc/services/DocumentRepository.php`
-  - `core/components/mxlocdoc/services/AssetRepository.php`
-- Будущие processors:
+- Сервисы:
+  - `core/components/mxlocdoc/services/pathresolver.class.php`
+  - `core/components/mxlocdoc/services/documentrepository.class.php`
+  - `core/components/mxlocdoc/services/assetrepository.class.php`
+- Processors:
   - `core/components/mxlocdoc/processors/mgr/document/get.class.php`
   - `core/components/mxlocdoc/processors/mgr/asset/get.class.php`
-- Будущий HTTP entrypoint:
+- HTTP entrypoint:
   - `assets/components/mxlocdoc/connector.php`
 
 ## Зачем
@@ -33,12 +35,14 @@
 
 ## Чеклист готовности
 
-- Любой относительный путь приводится к `realpath`.
-- Итоговый путь обязан начинаться с `realpath(mxlocdoc.docs_path)`.
-- `.md` читаются только через `DocumentRepository`.
-- Картинки и ассеты читаются только через `AssetRepository`.
-- Файлы больше `mxlocdoc.max_file_size` не читаются.
-- Ошибки различают: не задан `docs_path`, файл не найден, запрещенное расширение, выход за корень, файл слишком большой.
+- [x] Любой относительный путь приводится к `realpath`.
+- [x] Итоговый путь обязан начинаться с `realpath(mxlocdoc.docs_path)`.
+- [x] `.md` читаются только через `DocumentRepository`.
+- [x] Картинки и ассеты читаются только через `AssetRepository`.
+- [x] Файлы больше `mxlocdoc.max_file_size` не читаются.
+- [x] Ошибки различают: не задан `docs_path`, файл не найден, запрещенное расширение, выход за корень, файл слишком большой.
+- [x] Добавлены processors `mgr/document/get` и `mgr/asset/get`.
+- [x] Проверены `php -l` и CLI smoke со stub MODX.
 
 ## Риски и ограничения
 

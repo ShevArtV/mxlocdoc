@@ -12,6 +12,15 @@ class mxLocDoc
     /** @var array */
     public $config = array();
 
+    /** @var mxLocDocPathResolver */
+    protected $pathResolver;
+
+    /** @var mxLocDocDocumentRepository */
+    protected $documentRepository;
+
+    /** @var mxLocDocAssetRepository */
+    protected $assetRepository;
+
     public function __construct(modX &$modx, array $config = array())
     {
         $this->modx =& $modx;
@@ -55,6 +64,45 @@ class mxLocDoc
         if ($this->modx->lexicon) {
             $this->modx->lexicon->load('mxlocdoc:default', 'mxlocdoc:setting');
         }
+    }
+
+    /**
+     * @return mxLocDocPathResolver
+     */
+    public function getPathResolver()
+    {
+        if (!$this->pathResolver) {
+            require_once $this->config['core_path'] . 'services/pathresolver.class.php';
+            $this->pathResolver = new mxLocDocPathResolver($this->modx, $this);
+        }
+
+        return $this->pathResolver;
+    }
+
+    /**
+     * @return mxLocDocDocumentRepository
+     */
+    public function getDocumentRepository()
+    {
+        if (!$this->documentRepository) {
+            require_once $this->config['core_path'] . 'services/documentrepository.class.php';
+            $this->documentRepository = new mxLocDocDocumentRepository($this->modx, $this->getPathResolver());
+        }
+
+        return $this->documentRepository;
+    }
+
+    /**
+     * @return mxLocDocAssetRepository
+     */
+    public function getAssetRepository()
+    {
+        if (!$this->assetRepository) {
+            require_once $this->config['core_path'] . 'services/assetrepository.class.php';
+            $this->assetRepository = new mxLocDocAssetRepository($this->modx, $this, $this->getPathResolver());
+        }
+
+        return $this->assetRepository;
     }
 
     /**
