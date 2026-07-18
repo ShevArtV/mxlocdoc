@@ -1,5 +1,7 @@
 # 09. Release
 
+Status: done for `0.1.0-pl` transport build on 2026-07-19.
+
 ## Цель
 
 Описать финальный выпуск mxLocDoc как MODX 2 transport-пакета после содержательной реализации и проверки на стенде.

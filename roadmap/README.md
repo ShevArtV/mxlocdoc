@@ -4,7 +4,7 @@ mxLocDoc - легкий MODX 2 extra-пакет для просмотра лок
 
 ## Ключевые решения
 
-- Платформа: MODX 2.
+- Платформа: MODX 2; следующий отдельный этап — порт на MODX 3.
 - Сборщик будущего пакета: `modxbuilder`.
 - Интерфейс: lightweight manager CMP на vanilla JS/CSS, без VitePress, Node, Vue, Vite и отдельного фронтенд-билда.
 - Источник документации: локальная папка из системной настройки `mxlocdoc.docs_path`; если внутри есть языковые подпапки (`en`, `ru`), manager UI показывает переключатель языка.
@@ -21,10 +21,11 @@ mxLocDoc - легкий MODX 2 extra-пакет для просмотра лок
 - [03. Secure Filesystem](03-secure-filesystem.md) - done.
 - [04. Navigation](04-navigation.md) - done.
 - [05. Markdown Assets](05-markdown-assets.md) - done.
-- [06. Manager UI](06-manager-ui.md) - done locally; live manager browser check is deferred to Hostland stand.
+- [06. Manager UI](06-manager-ui.md) - done.
 - [07. Search](07-search.md) - done.
-- [08. Hostland Stand](08-hostland-stand.md)
-- [09. Release](09-release.md)
+- [08. Hostland Stand](08-hostland-stand.md) - done.
+- [09. Release](09-release.md) - done; `0.1.0-pl` transport built.
+- [10. MODX 3 Port](10-modx3-port.md) - planned.
 
 ## MVP-граница
 

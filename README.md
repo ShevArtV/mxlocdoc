@@ -5,12 +5,10 @@ Lightweight MODX Revolution 2 extra for reading local Markdown documentation ins
 Current status: package skeleton with system settings, secure filesystem
 services, Markdown navigation, safe Markdown rendering with protected asset
 URLs, a vanilla JS/CSS manager docs UI, multilingual documentation roots,
-and cached filesystem live-search.
+cached filesystem live-search, and a built MODX 2 transport package.
 
-Documentation intended for public publishing lives in [`docs/`](docs/). The same
-Markdown tree is mirrored into `core/components/mxlocdoc/docs/` so the installed
-package can render the documentation in the MODX manager without a separate
-documentation source.
+User documentation is available in [`docs/`](docs/). The package also ships the
+same documentation for the built-in MODX manager viewer.
 
 ## Core Decisions
 
@@ -37,9 +35,12 @@ The implementation plan is in [`roadmap/`](roadmap/):
 - [`03-secure-filesystem.md`](roadmap/03-secure-filesystem.md) — done.
 - [`04-navigation.md`](roadmap/04-navigation.md) — done.
 - [`05-markdown-assets.md`](roadmap/05-markdown-assets.md) — done.
-- [`06-manager-ui.md`](roadmap/06-manager-ui.md) — done locally; live manager browser check is deferred to Hostland stand.
+- [`06-manager-ui.md`](roadmap/06-manager-ui.md) — done.
 - [`07-search.md`](roadmap/07-search.md) — done.
+- [`08-hostland-stand.md`](roadmap/08-hostland-stand.md) — done.
+- [`09-release.md`](roadmap/09-release.md) — done; `0.1.0-pl` transport built.
+- [`10-modx3-port.md`](roadmap/10-modx3-port.md) — planned.
 
 ## License
 
-License will be defined before the first package release.
+GNU GPL v2, same as miniShop2. See [`LICENSE`](LICENSE).

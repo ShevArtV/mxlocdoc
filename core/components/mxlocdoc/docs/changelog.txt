@@ -15,3 +15,4 @@ mxLocDoc Changelog
 - Add manager cache clear plugin for mxLocDoc search cache invalidation.
 - Add multilingual documentation roots and manager language selector.
 - Add publishable English and Russian documentation.
+- Set package license to GNU GPL v2.
