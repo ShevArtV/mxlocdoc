@@ -7,6 +7,11 @@ services, Markdown navigation, safe Markdown rendering with protected asset
 URLs, a vanilla JS/CSS manager docs UI, multilingual documentation roots,
 and cached filesystem live-search.
 
+Documentation intended for public publishing lives in [`docs/`](docs/). The same
+Markdown tree is mirrored into `core/components/mxlocdoc/docs/` so the installed
+package can render the documentation in the MODX manager without a separate
+documentation source.
+
 ## Core Decisions
 
 - MODX 2 package.
