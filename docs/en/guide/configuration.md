@@ -9,6 +9,7 @@ mxLocDoc is configured through MODX system settings.
 | Setting | Default | Purpose |
 |---|---:|---|
 | `mxlocdoc.docs_path` | `[[+corePath]]components/mxlocdoc/docs/` | Local Markdown documentation root. |
+| `mxlocdoc.languages` | `en,ru` | Comma-separated language codes that enable multilingual mode. An empty value means single-language mode. See the "Languages" page. |
 | `mxlocdoc.default_file` | `README.md` | File opened for a folder index. |
 | `mxlocdoc.nav_file` | `_sidebar.json` | Primary navigation manifest name. |
 | `mxlocdoc.search_enabled` | `Yes` | Enables live search. |

@@ -9,6 +9,7 @@ mxLocDoc настраивается через системные настрой
 | Настройка | По умолчанию | Назначение |
 |---|---:|---|
 | `mxlocdoc.docs_path` | `[[+corePath]]components/mxlocdoc/docs/` | Локальный корень Markdown-документации. |
+| `mxlocdoc.languages` | `en,ru` | Список кодов языков через запятую, для которых включается мультиязычность. Пустое значение — моно-режим. См. раздел «Языки». |
 | `mxlocdoc.default_file` | `README.md` | Файл, который открывается как index папки. |
 | `mxlocdoc.nav_file` | `_sidebar.json` | Основной manifest навигации. |
 | `mxlocdoc.search_enabled` | `Да` | Включает live-search. |

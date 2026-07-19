@@ -6,7 +6,7 @@
       {"title": "Setup", "path": "guide/setup.md"},
       {"title": "Configuration", "path": "guide/configuration.md"},
       {"title": "Navigation", "path": "guide/navigation.md"},
-      {"title": "Markdown and assets", "path": "guide/markdown-assets.md"},
+      {"title": "Markdown syntax", "path": "guide/markdown-syntax.md"},
       {"title": "Search and cache", "path": "guide/search-cache.md"},
       {"title": "Languages", "path": "guide/languages.md"},
       {"title": "Troubleshooting", "path": "guide/troubleshooting.md"}
