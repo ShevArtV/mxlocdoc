@@ -1,6 +1,12 @@
 mxLocDoc Changelog
 ==================
 
+1.0.1-pl
+--------
+
+- Fix invisible list bullets and numbers in the manager document view: the ExtJS reset shipped with the manager theme drops `list-style` globally, so the viewer now restores it explicitly, together with spacing for list items and nested lists.
+- Support heading anchors in document links: `[text](guide/setup.md#section)` and same-document `[text](#section)` now scroll the document panel to the heading instead of doing nothing or jumping the whole manager viewport. Anchors work for headings of any level and for Cyrillic slugs.
+
 1.0.0-pl
 --------
 
